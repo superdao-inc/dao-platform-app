@@ -1,0 +1,9 @@
+.gitlab
+.helm
+.vscode
+
+**/node_modules
+**/dist
+README.md
+.gitlab-ci.yml
+**/.env.example

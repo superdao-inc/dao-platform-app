@@ -1,0 +1,22 @@
+schema: apps/superdao-backend/src/services/the-graph/graph-polygon/**/*.gql
+documents: 'apps/superdao-backend/src/services/blockchain/**/*.gql'
+generates:
+  apps/superdao-backend/src/services/the-graph/graph-polygon/types.generated.ts:
+    plugins:
+      - typescript
+      - add:
+          content: '/* eslint-disable no-shadow,camelcase */'
+  apps/superdao-backend/src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: 'services/the-graph/graph-polygon/types.generated.ts'
+
+    plugins:
+      - add:
+          content: '// @ts-nocheck'
+      - typescript-operations
+      - typescript-graphql-request
+
+    config:
+      skipTypename: true

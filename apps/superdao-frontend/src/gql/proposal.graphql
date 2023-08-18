@@ -1,0 +1,158 @@
+fragment PublicProposal on Proposal {
+	id
+  title
+  description
+  createdBySuperdao
+  attachment
+  votingType
+  votingPowerType
+  createdAt
+  startAt
+  endAt
+  choices {
+    ...PublicChoice
+  }
+  scores {
+    ...PublicScore
+  }
+}
+
+fragment PublicProposalList on Proposal {
+	id
+  title
+  description
+  createdBySuperdao
+  attachment
+  votingType
+  votingPowerType
+  createdAt
+  startAt
+  endAt
+  choices {
+    ...PublicChoice
+  }
+  scores {
+    ...PublicScore
+  }
+  votes {
+    ...ProposalVote
+  }
+}
+
+fragment PublicChoice on Choice {
+	id
+  name
+}
+
+fragment PublicScore on Score {
+  choiceId,
+  value
+}
+
+fragment VotedUser on User {
+	id
+	avatar
+	walletAddress
+	ens
+	displayName
+  isClaimed
+  slug
+}
+
+fragment PublicVote on VoteModel {
+  power,
+  user {
+    ...VotedUser
+  },
+  choiceId,
+  createdAt
+}
+
+fragment ProposalVote on VoteModel {
+  id
+}
+
+query getChoices (	
+  $proposalId: String!,
+) {
+  getChoices (proposalId: $proposalId) {
+    ...PublicChoice
+  }
+}
+
+query getScores (	
+  $proposalId: String!,
+) {
+  getScores (proposalId: $proposalId) {
+    ...PublicScore
+  }
+}
+
+query getVotes (	
+  $proposalId: String!,
+) {
+  getVotes (proposalId: $proposalId) {
+    ...PublicVote
+  }
+}
+
+query getProposal (	
+  $proposalId: String!,
+) {
+  getProposal (proposalId: $proposalId) {
+    ...PublicProposal
+    dao {
+      id
+    }
+  }
+}
+
+query getAllProposals (	
+  $daoId: ID!,
+	$limit: Int = 20
+	$offset: Int = 0
+	$status: ProposalStatus
+) {
+  proposals (daoId: $daoId, limit: $limit, offset: $offset, status: $status) {
+    count
+		items {
+			...PublicProposalList
+		}
+  }
+}
+
+mutation createProposal (	
+  $proposal: ProposalSettingsDto!,
+  $createChoiceData: CreateManyChoicesDto!
+) {
+  createProposal (proposal: $proposal, createChoiceData: $createChoiceData) {
+    ...PublicProposal
+  }
+}
+
+mutation editProposal (	
+  $proposalId: String!,
+  $proposal: ProposalSettingsDto!,
+  $createChoiceData: CreateManyChoicesDto!
+) {
+  editProposal (proposalId: $proposalId, proposal: $proposal, createChoiceData: $createChoiceData) {
+    ...PublicProposal
+  }
+}
+
+mutation deleteProposal (	
+  $proposalId: String!,
+) {
+  deleteProposal (proposalId: $proposalId)
+}
+
+mutation vote (	
+  $proposalId: String!,
+  $choiceIds: [String!]!
+) {
+  vote (proposalId: $proposalId, choiceIds: $choiceIds)
+}
+
+mutation addDemoProposals {
+  addDemoProposals
+}

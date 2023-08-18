@@ -1,0 +1,104 @@
+fragment PublicUser on User {
+	id
+	avatar
+	cover
+	walletAddress
+	walletType
+	ens
+	nonce
+	displayName
+	slug
+	bio
+	email
+	emailVerified
+	links {
+		site
+		discord
+		twitter
+		telegram
+		instagram
+	}
+	hasBetaAccess
+	isSupervisor
+}
+
+query CurrentUser {
+	currentUser {
+		...PublicUser
+		createdAt
+		onboarding {
+			visitedPages
+		}
+	}
+}
+
+query UserByIdOrSlug($idOrSlug: String!) {
+	userByIdOrSlug(idOrSlug: $idOrSlug) {
+		...PublicUser
+	}
+}
+
+query UserWalletAddressByIdOrSlug($idOrSlug: String!) {
+	userByIdOrSlug(idOrSlug: $idOrSlug) {
+		walletAddress
+	}
+}
+
+query HasCookieDecision {
+	hasCookieDecision
+}
+
+query allUsers($limit: Int = 20, $offset: Int = 0, $search: String = "") {
+	allUsers(limit: $limit, offset: $offset, search: $search) {
+		count
+		items {
+			...PublicUser
+		}
+	}
+}
+
+query UserDaoParticipation($userId: String!) {
+	daoParticipation(userId: $userId) {
+		count
+		items {
+			createdAt
+			daoId
+			id
+			role
+			tiers
+			userId
+			dao {
+				id
+				name
+				slug
+				avatar
+				membersCount
+				description
+				mode
+				contractAddress
+			}
+		}
+	}
+}
+
+mutation UpdateUser($updateUserData: UpdateUserInput!) {
+	updateUser(updateUserData: $updateUserData) {
+		...PublicUser
+	}
+}
+
+mutation JoinBeta {
+	joinBeta {
+		...PublicUser
+	}
+}
+
+mutation VisitPage($pagePath: String!) {
+	visitPage(pagePath: $pagePath) {
+		...PublicUser
+	}
+}
+
+mutation DecideAboutCookies($decision: Boolean!) {
+	decideAboutCookies(decision: $decision)
+}

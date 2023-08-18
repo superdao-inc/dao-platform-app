@@ -1,0 +1,16 @@
+fragment UserNotifications on UserNotification {
+	createdAt
+	newNftData {
+		id
+	}
+	id
+	seen
+	type
+	userId
+}
+
+query CurrentUserNotifications {
+	userNotifications {
+		...UserNotifications
+	}
+}

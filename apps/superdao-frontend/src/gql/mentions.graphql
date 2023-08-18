@@ -1,0 +1,9 @@
+query DaoSuggestionsBySlug($input: DaoSuggestionsBySlugInput!) {
+	daoSuggestionsBySlug(input: $input) {
+		suggestions {
+			id
+			name
+			avatar
+		}
+	}
+}

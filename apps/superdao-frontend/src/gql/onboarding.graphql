@@ -1,0 +1,18 @@
+query NewFeatures {
+	clientFeatures {
+		id
+		name
+		createdAt
+	}
+}
+
+mutation AddNewFeature($name: String!) {
+	createClientFeature(clientFeature: { name: $name }) {
+		name
+		createdAt
+	}
+}
+
+mutation UpdateFeature($id: ID!, $name: String!) {
+	updateClientFeature(clientFeature: { id: $id, name: $name })
+}

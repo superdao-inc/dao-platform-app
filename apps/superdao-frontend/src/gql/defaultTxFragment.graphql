@@ -1,0 +1,40 @@
+fragment DefaultTx on TransactionType {
+	accessList {
+		address
+		storageKeys
+	}
+	chainId
+	data
+	from
+	gasLimit {
+		type
+		hex
+	}
+	gasPrice {
+		type
+		hex
+	}
+	maxFeePerGas {
+		type
+		hex
+	}
+	maxPriorityFeePerGas {
+		type
+		hex
+	}
+	nonce
+	r
+	s
+	to
+	type
+	v
+	value {
+		type
+		hex
+	}
+}
+
+fragment DefaultTxWithHash on TransactionType {
+	...DefaultTx,
+	hash
+}

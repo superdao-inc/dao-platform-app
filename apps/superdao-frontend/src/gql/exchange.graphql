@@ -1,0 +1,15 @@
+query exchange($quoteCurrenciesIds: [Int!]!) {
+	exchange(quoteCurrenciesIds: $quoteCurrenciesIds) {
+		baseCurrencyId,
+		quoteCurrencyId,
+		rate
+	}
+}
+
+query exchangeCurrencies($baseCurrenciesIds: [Int!]!, $quoteCurrenciesIds: [Int!]!) {
+	exchangeCurrencies(baseCurrenciesIds: $baseCurrenciesIds, quoteCurrenciesIds: $quoteCurrenciesIds) {
+		baseCurrencyId,
+		quoteCurrencyId,
+		rate
+	}
+}

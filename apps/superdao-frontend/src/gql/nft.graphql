@@ -1,0 +1,249 @@
+fragment CommonNftMetadata on NftMetadata {
+	description
+	image
+	animationUrl
+	attributes {
+		traitType
+		value
+	}
+}
+
+fragment CommonEnrichedNft on EnrichedNft {
+	amount
+	contractType
+	dao {
+		id
+		slug
+		avatar
+		name
+		contractAddress
+	}
+	metadata {
+		...CommonNftMetadata
+	}
+	name
+	syncedAt
+	tokenAddress
+	tokenId
+	tokenUri
+}
+
+query UserNfts($userId: String!) {
+	userNfts(userId: $userId) {
+		...CommonEnrichedNft
+	}
+}
+
+query UserNftsByDao($userId: String!, $daoAddress: String!) {
+	userNftsByDao(userId: $userId, daoAddress: $daoAddress) {
+		amount
+		contractType
+		dao {
+			id
+			slug
+			avatar
+			name
+			contractAddress
+		}
+		metadata {
+			...CommonNftMetadata
+		}
+		name
+		syncedAt
+		tierId
+		tierName
+		tokenAddress
+		tokenId
+		tokenUri
+		collectionAddress
+		symbol
+	}
+}
+
+query SingleNft($daoAddress: String!, $tokenId: String!) {
+	singleNft(daoAddress: $daoAddress, tokenId: $tokenId) {
+		amount
+		contractType
+		dao {
+			id
+			slug
+			avatar
+			name
+			contractAddress
+		}
+		metadata {
+			...CommonNftMetadata
+		}
+		name
+		syncedAt
+		tierId
+		tierName
+		tokenAddress
+		tokenId
+		tokenUri
+		collectionAddress
+		symbol
+	}
+}
+
+query NftCollection($daoAddress: String!) {
+	collection(daoAddress: $daoAddress) {
+		name
+		collectionAddress
+		description
+		tiers {
+			artworks {
+				id
+				image
+				animationUrl
+			}
+			currency
+			maxAmount
+			id
+			isDeactivated
+			tierName
+			description
+			totalPrice {
+				openSale
+				whitelistSale
+			}
+			totalAmount
+			tierArtworkType
+			artworksTotalLength
+			salesActivity {
+				openSale
+				whitelistSale
+			}
+			achievements {
+				displayType
+				sdTrait
+				traitType
+				valueString
+				valueNumber
+			}
+			benefits {
+				displayType
+				sdTrait
+				traitType
+				valueString
+				valueNumber
+			}
+			customProperties {
+				displayType
+				sdTrait
+				traitType
+				valueString
+				valueNumber
+			}
+		}
+	}
+}
+
+query VerifyWhitelistSale($daoAddress: String!, $tier: String!) {
+	getVerify(daoAddress: $daoAddress, tier: $tier)
+}
+
+query VerifyWhitelistClaim($daoAddress: String!, $tier: String!) {
+	getVerifyWhitelistClaim(daoAddress: $daoAddress, tier: $tier)
+}
+
+mutation ClaimNft($daoAddress: String!, $tier: String!) {
+	claimNft(daoAddress: $daoAddress, tier: $tier)
+}
+
+mutation ClaimNftByEmail($uid: String!) {
+	claimNftByEmail(uid: $uid)
+}
+
+mutation Airdrop($airdropData: AirdropInput!) {
+	airdrop(airdropData: $airdropData)
+}
+
+# mutation Whitelist($whitelistData: WhitelistAddWalletInput!) {
+# 	whitelist(whitelistData: $whitelistData)
+# }
+
+mutation SaveClaimWhitelist($whitelistData: WhitelistAddWalletInput!) {
+	saveClaimWhitelist(whitelist: $whitelistData)
+}
+
+mutation BuyNftOpenSale($buyNftData: BuyNftOpenSaleInput!) {
+	buyNftOpenSale(buyNftData: $buyNftData)
+}
+
+mutation BuyNftWhitelistSale($buyNftData: BuyNftWhitelistSaleInput!) {
+	buyNftWhitelistSale(buyNftData: $buyNftData)
+}
+
+query CollectionInfoByTier($daoAddress: String!, $tier: String!) {
+	collectionInfoByTier(daoAddress: $daoAddress, tier: $tier) {
+		id
+		isDeactivated
+		tierName
+		description
+		artworks {
+			id
+			image
+			animationUrl
+		}
+		maxAmount
+		totalAmount
+		totalPrice {
+			openSale
+			whitelistSale
+		}
+		tierArtworkType
+		currency
+		collectionAddress
+		collectionName
+		owners {
+			id
+			displayName
+			email
+			avatar
+			walletAddress
+			ens
+			tokenId
+			name
+		}
+		winterFiatCheckoutProjectId
+	}
+}
+
+query CollectionArtworks($daoAddress: String!, $tier: String!) {
+	collectionArtworks(daoAddress: $daoAddress, tier: $tier) {
+		artworks {
+			id
+			image
+			animationUrl
+		}
+	}
+}
+
+query CheckNftAvailability($daoAddress: String!, $tier: String!) {
+	checkNftAvailability(daoAddress: $daoAddress, tier: $tier) {
+		isAvailable
+		availableCount
+	}
+}
+
+query GetMintedNftMeta($daoAddress: String!, $tier: String!) {
+	getMintedNftMeta(daoAddress: $daoAddress, tier: $tier) {
+		artworkId
+		tokenId
+	}
+}
+
+query CalculateFee {
+	fee {
+		maxFeePerGas {
+			_hex
+			_isBigNumber
+		}
+		maxPriorityFeePerGas {
+			_hex
+			_isBigNumber
+		}
+		gasLimit
+	}
+}

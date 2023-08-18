@@ -1,0 +1,2 @@
+apps/{superdao-frontend,superdao-ui-tests}/src/**/*.generated.ts
+node_modules/

@@ -1,0 +1,342 @@
+fragment CommonWallet on Wallet {
+	id
+	ecosystem
+	chainId
+	name
+	description
+	address
+	type
+	valueUsd
+	chainId
+	main
+	tokensBalance {
+		token {
+			type
+			name
+			address
+			symbol
+			ecosystem
+			chainId
+			decimals
+			iconUrl
+			... on ERC721Token {
+				tokenId
+			}
+		}
+		quote {
+			currency
+			rate
+		}
+		value
+		amount
+	}
+}
+
+fragment PublicWallet on Wallet {
+	valueUsd
+	tokensBalance {
+		token {
+			type
+			name
+			address
+			symbol
+			ecosystem
+			chainId
+			decimals
+			iconUrl
+			... on ERC721Token {
+				tokenId
+			}
+		}
+		quote {
+			currency
+			rate
+		}
+		value
+		amount
+	}
+}
+
+fragment PublicTxs on Wallet {
+	id
+	chainId
+	name
+	address
+	main
+	transactions {
+		ecosystem
+		chainId
+		description
+		hash
+		type
+		status
+		executed
+		gasFee
+		direction
+		parts {
+			token {
+				type
+				name
+				address
+				symbol
+				ecosystem
+				chainId
+				decimals
+				iconUrl
+				... on ERC721Token {
+					tokenId
+				}
+			}
+			value
+			from {
+				type
+				address
+			}
+			to {
+				type
+				address
+			}
+			direction
+		}
+
+		fromAddress
+		toAddress
+		value
+	}
+}
+
+fragment Nft on NftInfo {
+	id
+	amount
+	blockNumber
+	blockNumberMinted
+	contractType
+	isPublic
+	metadata {
+		animationUrl
+		attributes {
+			displayType
+			traitType
+			value
+		}
+		backgroundColor
+		description
+		externalUrl
+		image
+		name
+		youtubeUrl
+	}
+	name
+	ownerOf
+	symbol
+	syncedAt
+	tokenAddress
+	tokenId
+	tokenUri
+}
+
+fragment PublicNfts on Treasury {
+	nfts(offset: $offset) {
+		amount
+		blockNumber
+		blockNumberMinted
+		contractType
+		metadata {
+			animationUrl
+			attributes {
+				displayType
+				traitType
+				value
+			}
+			backgroundColor
+			description
+			externalUrl
+			image
+			name
+			youtubeUrl
+		}
+		name
+		ownerOf
+		symbol
+		syncedAt
+		tokenAddress
+		tokenId
+		tokenUri
+	}
+}
+
+fragment CommonTreasury on Treasury {
+	wallets {
+		...CommonWallet
+	}
+	nfts(offset: $offset, isPublic: true) {
+		...Nft
+	}
+	assets {
+		...TokensBalance
+	}
+}
+
+fragment PublicWalletAssets on Treasury {
+	wallets {
+		...PublicWallet
+	}
+}
+
+fragment PublicWalletTxs on Treasury {
+	wallets {
+		...PublicTxs
+	}
+}
+
+fragment PublicWalletNfts on Treasury {
+	...PublicNfts
+}
+
+fragment Transaction on WalletTransaction {
+	ecosystem
+	chainId
+	description
+	hash
+	type
+	status
+	executed
+	gasFee
+	direction
+	parts {
+		token {
+			type
+			name
+			address
+			symbol
+			ecosystem
+			chainId
+			decimals
+			iconUrl
+			... on ERC721Token {
+				tokenId
+			}
+		}
+		value
+		from {
+			type
+			address
+		}
+		to {
+			type
+			address
+		}
+		direction
+	}
+	fromAddress
+	toAddress
+	value
+	walletAddress
+	walletName
+	walletId
+}
+
+
+query treasuryMainWalletAddress($daoId: String!) {
+	treasuryMainWalletAddress(daoId: $daoId)
+}
+
+fragment TokensBalance on TokenBalance {
+	token {
+		type
+		name
+		address
+		symbol
+		ecosystem
+		chainId
+		decimals
+		iconUrl
+		... on ERC721Token {
+			tokenId
+		}
+	}
+	quote {
+		currency
+		rate
+	}
+	value
+	amount
+}
+
+query treasury($daoId: String!, $offset: Int = 0) {
+	treasury(daoId: $daoId) {
+		...CommonTreasury
+	}
+}
+
+query publicTreasury($daoId: String!, $offset: Int = 0) {
+	treasury(daoId: $daoId) {
+		wallets {
+			...PublicWallet
+		}
+		nfts(offset: $offset, isPublic: true) {
+			...Nft
+		}
+		assets {
+			...TokensBalance
+		}
+	}
+}
+
+query publicTreasuryAssets($daoId: String!) {
+	treasury(daoId: $daoId) {
+		...PublicWalletAssets
+	}
+}
+
+query publicTreasuryTxs($daoId: String!, $offset: Int = 0) {
+	treasury(daoId: $daoId) {
+		...PublicWalletTxs
+	}
+}
+
+query publicTreasuryNfts($daoId: String!) {
+	treasury(daoId: $daoId) {
+		nfts(offset: 0, isPublic: true) {
+			...Nft
+		}
+	}
+}
+
+query privateTreasuryNfts($daoId: String!, $offset: Int = 0) {
+	treasury(daoId: $daoId) {
+		nfts(offset: $offset, isPublic: false) {
+			...Nft
+		}
+	}
+}
+
+query tokensBalance($daoId: String!) {
+	tokensBalance(daoId: $daoId) {
+		...TokensBalance
+	}
+}
+
+query daoTransactions($daoId: String!, $chainId: Int, $ecosystem: EcosystemType = EVM, $offset: Int = 0) {
+	daoTransactions(daoId: $daoId, chainId: $chainId, ecosystem: $ecosystem, offset: $offset) {
+		items {
+			...Transaction
+		}
+		limit
+		offset
+	}
+}
+
+mutation upsertTransactionMeta($data: UpsertTransactionMetaInput!) {
+	upsertTransactionMeta(data: $data) {
+		ecosystem
+		chainId
+		id
+		hash
+		description
+	}
+}
+
+mutation updateTreasuryValue {
+	updateTreasuryValue
+}

@@ -1,0 +1,86 @@
+#import "./defaultTxFragment.graphql"
+
+query AirdropTx($daoAddress: String!, $items: [AirdropParticipantInput!]!) {
+	airdropTx(daoAddress: $daoAddress, items: $items) {
+		...DefaultTx
+	}
+}
+
+query BanMemberTx($daoAddress: String!, $userId: String!, $tokenIds: [String!]!) {
+	banMemberTx(daoAddress: $daoAddress, userId: $userId, tokenIds: $tokenIds) {
+		...DefaultTx
+	}
+}
+
+query CreateDaoTx($name: String!) {
+	createDaoTx(name: $name) {
+		...DefaultTx
+	}
+}
+
+query WhitelistRemoveWalletsTx($daoAddress: String!, $userId: String!) {
+	whitelistRemoveWalletsTx(daoAddress: $daoAddress, userId: $userId) {
+		...DefaultTx
+	}
+}
+query WhitelistAddWalletsTx($daoAddress: String!, $whitelist: [whitelistParticipantInput!]!) {
+	whitelistAddWalletsTx(daoAddress: $daoAddress, whitelist: $whitelist) {
+		...DefaultTx
+	}
+}
+query SaveClaimWhiteListTx($daoAddress: String!, $whitelist: [whitelistParticipantInput!]!) {
+	saveClaimWhitelistTx(daoAddress: $daoAddress, whitelist: $whitelist) {
+		...DefaultTx
+	}
+}
+
+query BuyNftTx($daoAddress: String!, $toAddress: String!, $tier: String!) {
+	buyNftOpenSaleTx(daoAddress: $daoAddress, toAddress: $toAddress, tier: $tier) {
+		...DefaultTx
+	}
+}
+
+query BuyWhitelistNftTx($daoAddress: String!, $toAddress: String!, $tier: String!) {
+	buyNftWhitelistSaleTx(daoAddress: $daoAddress, toAddress: $toAddress, tier: $tier) {
+		...DefaultTx
+	}
+}
+
+mutation BuyNftMulticurrencyOpenSaleTx($daoAddress: String!, $tier: String!, $tokenAddress: String!) {
+	buyNftMulticurrencyOpenSaleTx(daoAddress: $daoAddress, tier: $tier, tokenAddress: $tokenAddress) {
+		...DefaultTx
+	}
+}
+
+mutation BuyNftAllowanceTx($daoAddress: String!, $tier: String!, $tokenAddress: String!) {
+	buyNftAllowanceTx(daoAddress: $daoAddress, tier: $tier, tokenAddress: $tokenAddress) {
+		...DefaultTx
+	}
+}
+
+mutation ProcessAllowanceTx($daoAddress: String!, $tier: String!, $tokenAddress: String!, $transactionHash: String!) {
+	processAllowanceTransaction(
+		daoAddress: $daoAddress
+		tier: $tier
+		tokenAddress: $tokenAddress
+		transactionHash: $transactionHash
+	)
+}
+
+query DeleteNftTierTx($daoAddress: String!, $erc721CollectionAddress: String!, $tier: String!) {
+	deleteNftTierTx(daoAddress: $daoAddress, erc721CollectionAddress: $erc721CollectionAddress, tier: $tier) {
+		...DefaultTx
+	}
+}
+
+query GrantMemberRoleTx($changeMemberRoleData: ChangeMemberRoleInput!) {
+	grantMemberRoleTx(changeMemberRoleData: $changeMemberRoleData) {
+		...DefaultTx
+	}
+}
+
+query RevokeMemberRoleTx($changeMemberRoleData: ChangeMemberRoleInput!) {
+	revokeMemberRoleTx(changeMemberRoleData: $changeMemberRoleData) {
+		...DefaultTx
+	}
+}

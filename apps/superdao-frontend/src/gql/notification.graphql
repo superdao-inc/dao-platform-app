@@ -1,0 +1,20 @@
+query CurrentUserNotification {
+	userNotifications {
+		createdAt
+		id
+		newNftData {
+			id
+		}
+		seen
+		type
+		userId
+	}
+}
+
+query HasNewNotifications {
+	hasNewNotifications
+}
+
+mutation ToggleNotification($notificationId: ID!) {
+	toggleNotification(notificationId: $notificationId)
+}

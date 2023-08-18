@@ -1,0 +1,13 @@
+{
+	"projects": {
+		"superdao-backend": {
+			"includes": ["./schema.gql"]
+		},
+		"ens-domain": {
+			"includes": ["./schema.ens-domain.gql"]
+		},
+		"snapshot": {
+			"includes": ["./schema.snapshot.gql"]
+		}
+	}
+}

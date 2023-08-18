@@ -1,0 +1,15 @@
+mutation SendEmailVerificationMessage {
+	sendEmailVerificationMessage {
+		nextAttemptToSendEmail
+	}
+}
+
+mutation UpdateUserEmail($updateUserEmailInput: UpdateUserEmailInput!) {
+	updateUserEmail(updateUserEmailInput: $updateUserEmailInput) {
+		nextAttemptToSendEmail
+	}
+}
+
+mutation RemoveUserEmail {
+	removeUserEmail
+}

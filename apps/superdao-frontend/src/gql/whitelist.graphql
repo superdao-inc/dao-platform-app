@@ -1,0 +1,59 @@
+fragment PublicWhitelist on Whitelist {
+	id
+	daoId
+	walletAddress
+	tiers
+	email
+	target
+	status
+}
+
+query GetDaoWhitelist(
+	$daoId: ID!
+	$limit: Int = 20
+	$offset: Int = 0
+	$search: String = ""
+	$target: WhitelistTargetsEnum!
+) {
+	getDaoWhitelist(daoId: $daoId, limit: $limit, offset: $offset, search: $search, target: $target) {
+		count
+		items {
+			...PublicWhitelist
+		}
+	}
+}
+
+mutation WhitelistRemoveWallet($whitelistRemoveWalletData: WhitelistRemoveWalletInput!) {
+	whitelistRemoveWallet(whitelistRemoveWalletData: $whitelistRemoveWalletData)
+}
+
+mutation WhitelistAddWallet($whitelistAddWalletData: WhitelistAddWalletInput!) {
+	whitelistAddWallet(whitelistAddWalletData: $whitelistAddWalletData)
+}
+
+query VerifyNftCollection($daoAddress: String!, $tier: String!) {
+	getVerify(daoAddress: $daoAddress, tier: $tier)
+}
+
+query DaoWhitelistSale($daoId: String!) {
+	daoWhitelistSale(daoId: $daoId) {
+		walletAddress
+		email
+		tiers
+	}
+}
+
+mutation WhitelistAddEmail($whitelistAddEmailData: WhitelistData!) {
+	whitelistAddEmail(whitelistAddEmailData: $whitelistAddEmailData)
+}
+
+mutation UpdateWhitelistStatus($updateWhitelistStatusData: UpdateWhitelistStatusInput!) {
+	updateWhitelistStatus(updateWhitelistStatusData: $updateWhitelistStatusData)
+}
+
+query GetWhitelistRecord($id: String!) {
+	getWhitelistRecord(id: $id) {
+		status
+		tiers
+	}
+}

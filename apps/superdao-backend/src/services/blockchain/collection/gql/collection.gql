@@ -1,0 +1,61 @@
+query getERC721Info($id: ID!) {
+	dao(id: $id) {
+		openSale {
+			tierIds
+			tierPrices
+		}
+		privateSale {
+			tierIds
+			tierPrices
+		}
+		collection {
+			id
+			name
+			url
+		}
+	}
+}
+
+query getTierAttributes($id: ID!) {
+	tier(id: $id) {
+		attributes {
+			key
+			value
+		}
+	}
+}
+
+query getTierInfo($id: ID!) {
+	tier(id: $id) {
+		nativeID
+		name
+		attributes {
+			key
+			value
+		}
+	}
+}
+
+query getTierOwners($id: ID!) {
+	tier(id: $id) {
+		Nfts(first: 1000) {
+			tokenID
+			owner {
+				id
+			}
+		}
+	}
+}
+
+query getCollectionInfo($id: ID!) {
+	dao(id: $id) {
+		collection {
+			id
+			name
+			url
+			tiers {
+				nativeID
+			}
+		}
+	}
+}

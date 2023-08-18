@@ -1,0 +1,1952 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+Token's static properties
+"""
+interface Token {
+	type: String!
+	name: String!
+	address: String
+	symbol: String!
+	ecosystem: EcosystemType
+	chainId: Float!
+	iconUrl: String
+	decimals: Float
+}
+
+"""
+It can be EVM-compatiple system or Solana, Near in the future.
+"""
+enum EcosystemType {
+	EVM
+}
+
+type ERC20Token implements Token {
+	type: String!
+	name: String!
+	address: String
+	symbol: String!
+	ecosystem: EcosystemType!
+	chainId: Float!
+	iconUrl: String!
+	decimals: Float!
+}
+
+type ERC721Token implements Token {
+	type: String!
+	name: String!
+	address: String!
+	symbol: String!
+	ecosystem: EcosystemType!
+	chainId: Float!
+	iconUrl: String
+	decimals: Float!
+	tokenId: Float!
+}
+
+type NativeToken implements Token {
+	type: String!
+	name: String!
+	address: String
+	symbol: String!
+	ecosystem: EcosystemType!
+	chainId: Float!
+	iconUrl: String!
+	decimals: Float!
+}
+
+type Account {
+	type: AccountType!
+	address: String
+}
+
+enum AccountType {
+	UNKNOWN
+	EXTERNAL
+	CONTRACT
+}
+
+type WalletTransactionPart {
+	token: Token!
+	value: String!
+	from: Account!
+	to: Account!
+	direction: WalletTransactionDirection!
+}
+
+enum WalletTransactionDirection {
+	IN
+	OUT
+	SELF
+}
+
+type WalletTransaction {
+	hash: ID!
+	ecosystem: EcosystemType!
+	chainId: Int
+	type: WalletTransactionType!
+	status: WalletTransactionStatus!
+	executed: String!
+	gasFee: String!
+	fromAddress: String
+	toAddress: String
+	value: String
+
+	"""
+	User defined annotation
+	"""
+	description: String
+	direction: WalletTransactionDirection!
+
+	"""
+	Part is separate in/out asset transfer within transaction. One element means simple one-step transfer.
+	"""
+	parts: [WalletTransactionPart!]
+	walletAddress: String
+	walletName: String
+	walletId: String
+}
+
+enum WalletTransactionType {
+	SEND
+	RECEIVE
+	SELL
+	EXECUTION
+	SAFE_SETUP
+	SEND_NFT
+	RECEIVE_NFT
+}
+
+enum WalletTransactionStatus {
+	SUCCESS
+	FAILED
+}
+
+type MemberRolesResponse {
+	SUDO: Int
+	CREATOR: Int
+	ADMIN: Int
+	MEMBER: Int
+}
+
+type AttachmentImageData {
+	fileId: String!
+}
+
+type AttachmentLinkData {
+	url: String!
+	title: String!
+	description: String!
+	image: String!
+}
+
+type Attachment {
+	id: ID!
+	postId: String!
+	type: AttachmentType!
+	image: AttachmentImageData
+	link: AttachmentLinkData
+	post: Post!
+}
+
+"""
+Post attachment types
+"""
+enum AttachmentType {
+	image
+	link
+}
+
+type Post {
+	id: ID!
+	daoId: String!
+	text: String!
+	attachments: [Attachment!]!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	dao: Dao!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Whitelist {
+	id: ID!
+	daoId: String!
+	walletAddress: String!
+	email: String!
+	tiers: [String!]!
+	target: String!
+	addedAt: DateTime!
+	status: WhitelistStatusEnum!
+}
+
+enum WhitelistStatusEnum {
+	Enabled
+	Archived
+	Disabled
+	Used
+}
+
+type ObjectInput {
+	name: String!
+	url: String!
+}
+
+type TierVotingWeightObject {
+	tierId: String!
+	weight: Float!
+}
+
+type CheckSlugResponse {
+	isAvailable: Boolean!
+	nextAvailable: String!
+}
+
+type DaoSales {
+	ERC721_WHITELIST_SALE: Boolean
+	ERC721_OPEN_SALE: Boolean
+}
+
+type DaoSalesResponse {
+	sales: DaoSales
+}
+
+type DaoSalesBlockchainApiData {
+	ERC721_WHITELIST_SALE: String
+	ERC721_OPEN_SALE: String
+}
+
+type NewNftData {
+	id: String!
+}
+
+type UserNotification {
+	id: ID!
+	userId: String!
+	seen: Boolean!
+	type: NotificationType!
+	newNftData: NewNftData
+	createdAt: DateTime!
+	user: User!
+}
+
+enum NotificationType {
+	NewNft
+}
+
+type Onboarding {
+	id: ID!
+	visitedPages: [String!]!
+}
+
+type Links {
+	id: ID!
+	entityId: String!
+	site: String
+	twitter: String
+	instagram: String
+	telegram: String
+	discord: String
+	facebook: String
+}
+
+type User {
+	id: ID!
+	walletAddress: String!
+	walletType: UserWalletType!
+	createdAt: DateTime!
+	ens: String
+	nonce: String!
+	displayName: String
+	slug: String
+	bio: String
+	email: String
+	emailVerified: Boolean!
+	avatar: String
+	cover: String
+	links: Links!
+	hasBetaAccess: Boolean!
+	isClaimed: Boolean!
+	isSupervisor: Boolean!
+	onboarding: Onboarding
+	votes: [VoteModel!]!
+	hasCookieDecision: Boolean!
+	agreedWithCookie: Boolean!
+	daoMembership: [DaoMembership!]!
+	notifications: [UserNotification!]!
+}
+
+"""
+The type of wallet the user is using
+"""
+enum UserWalletType {
+	SMART_WALLET
+	METAMASK
+	WALLET_CONNECT
+	MAGIC_LINK
+}
+
+type VoteModel {
+	id: ID!
+	power: Int!
+	proposal: Proposal!
+	choiceId: String!
+	user: User!
+	createdAt: DateTime!
+}
+
+type Choice {
+	id: ID!
+	name: String!
+	proposal: Proposal!
+}
+
+type Score {
+	id: ID!
+	choiceId: String!
+	value: Int!
+	proposal: Proposal!
+}
+
+type Proposal {
+	id: ID!
+	title: String!
+	description: String!
+	createdBySuperdao: Boolean!
+	attachment: String
+	edition: Int!
+	votingType: ProposalVotingType!
+	votingPowerType: ProposalVotingPowerType!
+	createdAt: DateTime!
+	startAt: DateTime!
+	endAt: DateTime!
+	votes: [VoteModel!]!
+	choices: [Choice!]!
+	scores: [Score!]!
+	dao: Dao!
+}
+
+"""
+Proposal voting type
+"""
+enum ProposalVotingType {
+	yesNoAbstain
+	singleChoice
+	multipleChoice
+}
+
+"""
+Proposal power voting type
+"""
+enum ProposalVotingPowerType {
+	single
+	calculating
+}
+
+type DaoAnalytics {
+	id: ID!
+	dao: Dao!
+	daoId: String!
+	mask: DaoMaskType!
+}
+
+"""
+Describes usage of particular dao
+"""
+enum DaoMaskType {
+	Public
+	Test
+	Internal
+}
+
+type WalletOwner {
+	id: String
+	walletAddress: String!
+	avatar: String
+	displayName: String
+	isDaoMember: Boolean!
+	role: DaoMemberRole
+}
+
+enum DaoMemberRole {
+	Sudo
+	Creator
+	Admin
+	Member
+}
+
+type Quote {
+	currency: String!
+
+	"""
+	Price for 1 token in selected currency (1 MATIC = 0.9 USD, rate is "0.9")
+	"""
+	rate: String
+}
+
+"""
+Token amount and value in terms of exchange rates
+"""
+type TokenBalance {
+	token: Token!
+
+	"""
+	Exchange quote for one token nominated in selected currency
+	"""
+	quote: Quote!
+
+	"""
+	Total value in quote currency (quote.rate * amount)
+	"""
+	value: String!
+
+	"""
+	Number of available tokens
+	"""
+	amount: String!
+	ecosystem: EcosystemType
+	tokenAddress: String
+	symbol: String!
+	name: String!
+	decimals: Int!
+	logo: String
+	balance: String!
+	valueUsd: Float!
+	priceUsd: Float!
+}
+
+type NftOpenseaMetadataAttribute {
+	displayType: String
+	traitType: String
+	sdTrait: String
+	value: String!
+}
+
+type NftOpenseaMetadata {
+	image: String
+	externalUrl: String
+	description: String
+	name: String
+	animationUrl: String
+	youtubeUrl: String
+	backgroundColor: String
+	attributes: [NftOpenseaMetadataAttribute!]
+}
+
+type NftInfo {
+	id: String!
+	tokenAddress: String!
+	tokenId: String!
+	contractType: String!
+	ownerOf: String!
+	blockNumber: String!
+	blockNumberMinted: String!
+	tokenUri: String
+	metadata: NftOpenseaMetadata
+	syncedAt: String
+	amount: String
+	name: String!
+	symbol: String
+	isPublic: Boolean!
+}
+
+type NftTransferableInfo {
+	id: String!
+	isTransferable: Boolean
+}
+
+type Wallet {
+	id: ID!
+	address: String!
+	name: String!
+	description: String
+	daoId: String!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	valueUsd: Float!
+	tokensBalance: [TokenBalance!]!
+	type: TreasuryWalletType!
+	owners: [WalletOwner!]
+	transactions: [WalletTransaction!]!
+	ecosystem: EcosystemType!
+	chainId: ChainId
+	main: Boolean!
+	nfts: [NftInfo!]
+}
+
+enum TreasuryWalletType {
+	EXTERNAL
+	SAFE
+}
+
+"""
+For EVM-compatible systems only.
+"""
+enum ChainId {
+	ETHEREUM_MAINNET
+	ETHEREUM_TESTNET_ROPSTEN
+	ETHEREUM_TESTNET_KOVAN
+	POLYGON_MAINNET
+	POLYGON_TESTNET_MUMBAI
+	BINANCE_SMART_CHAIN_MAINNET
+	BINANCE_SMART_CHAIN_TESTNET
+}
+
+type ReferralMember {
+	id: ID!
+	referralLinkId: String!
+	daoMembershipId: String!
+	createdAt: DateTime!
+}
+
+type ReferralLink {
+	id: ID!
+	shortId: ID!
+	referralCampaignId: String!
+	referralCampaign: ReferralCampaign!
+	ambassadorWallet: String
+	limit: Float!
+	limitLeft: Float!
+	status: String!
+	createdAt: DateTime!
+}
+
+type ReferralCampaign {
+	id: ID!
+	shortId: ID!
+	daoId: String!
+	tier: String!
+	createdAt: DateTime!
+	defaultLimit: Float!
+	isRecursive: Boolean!
+}
+
+type NftAttribute {
+	displayType: String
+	traitType: String
+	sdTrait: String
+	value: String
+}
+
+type MultiTypeNftAttribute {
+	displayType: String
+	traitType: String
+	sdTrait: String
+	valueString: String
+	valueNumber: Float
+}
+
+type NftMetadata {
+	id: String
+	image: String
+	description: String
+	animationUrl: String
+	attributes: [NftAttribute!]
+	imageName: String
+	animationUrlName: String
+	initialSize: Float
+	compressedSize: Float
+}
+
+type EnrichedNft {
+	tokenAddress: String!
+	tokenId: String!
+	contractType: String!
+	tokenUri: String
+	syncedAt: String
+	amount: String
+	name: String
+	symbol: String
+	metadata: NftMetadata
+	dao: Dao!
+}
+
+type EnrichedNftWithCollectionAddress {
+	tokenAddress: String!
+	tokenId: String!
+	contractType: String!
+	tokenUri: String
+	syncedAt: String
+	amount: String
+	name: String
+	symbol: String
+	metadata: NftMetadata
+	dao: Dao!
+	collectionAddress: String
+	tierId: String!
+	tierName: String!
+}
+
+type TotalPrice {
+	openSale: String!
+	whitelistSale: String!
+}
+
+type TierSalesActivity {
+	openSale: Boolean!
+	whitelistSale: Boolean!
+}
+
+type NftTier {
+	id: String!
+	isDeactivated: Boolean!
+	tierName: String
+	description: String
+	artworks: [NftMetadata!]!
+	artworksTotalLength: Int!
+	currency: String
+	totalPrice: TotalPrice
+	tierArtworkType: TierArtworkTypeStrings!
+	maxAmount: Float!
+	totalAmount: Float!
+	isTransferable: Boolean
+	achievements: [MultiTypeNftAttribute!]!
+	benefits: [MultiTypeNftAttribute!]!
+	customProperties: [MultiTypeNftAttribute!]!
+	salesActivity: TierSalesActivity!
+}
+
+enum TierArtworkTypeStrings {
+	one
+	reveal
+	unique
+	random
+}
+
+type Collection {
+	collectionAddress: String!
+	name: String!
+	description: String!
+	tiers: [NftTier!]!
+}
+
+type Owners {
+	id: String!
+	displayName: String
+	email: String
+	avatar: String
+	walletAddress: String!
+	ens: String
+	name: String!
+	tokenId: String!
+}
+
+type CollectionTierInfo {
+	id: String!
+	isDeactivated: Boolean!
+	tierName: String
+	description: String
+	artworks: [NftMetadata!]!
+	maxAmount: Float!
+	tierArtworkType: TierArtworkTypeStrings!
+	totalAmount: Float!
+	totalPrice: TotalPrice
+	currency: String!
+	collectionAddress: String!
+	collectionName: String!
+	owners: [Owners!]!
+	winterFiatCheckoutProjectId: Int
+}
+
+type CollectionArtworks {
+	artworks: [NftMetadata!]!
+}
+
+type NftArtwork {
+	id: String
+	image: String!
+	animationUrl: String
+}
+
+type BigNumber {
+	_hex: String!
+	_isBigNumber: Boolean!
+}
+
+type CalculatedFee {
+	maxFeePerGas: BigNumber!
+	maxPriorityFeePerGas: BigNumber!
+	gasLimit: Int!
+}
+
+type CheckNftAvailabilityResponse {
+	availableCount: Int!
+	isAvailable: Boolean!
+}
+
+type GetMintedNftResponse {
+	artworkId: Int
+	tokenId: Int
+}
+
+type RoadmapbonusObject {
+	title: String!
+	description: String!
+	image: String!
+}
+
+type RoadmapLevelObject {
+	xpNeeded: Float!
+	bonuses: [RoadmapbonusObject!]!
+}
+
+type LeaderboardMember {
+	user: User!
+	level: Float!
+	xp: Float!
+	achievementNFTs: [AchievementNft!]!
+	achievementNFTsCount: Float!
+	role: DaoMemberRole!
+	roadmapLevelsCount: Float!
+}
+
+type AchievementNft {
+	tokenAddress: String!
+	tokenId: String!
+	contractType: String!
+	tokenUri: String
+	syncedAt: String
+	amount: String
+	name: String
+	symbol: String
+	tierId: String!
+	tierName: String!
+	ownerOf: String!
+	metadata: NftMetadata
+}
+
+type AchievementTierWithOwners {
+	id: String!
+	isDeactivated: Boolean!
+	tierName: String
+	description: String
+	artworks: [NftMetadata!]!
+	artworksTotalLength: Int!
+	currency: String
+	totalPrice: TotalPrice
+	tierArtworkType: TierArtworkTypeStrings!
+	maxAmount: Float!
+	totalAmount: Float!
+	isTransferable: Boolean
+	achievements: [MultiTypeNftAttribute!]!
+	benefits: [MultiTypeNftAttribute!]!
+	customProperties: [MultiTypeNftAttribute!]!
+	salesActivity: TierSalesActivity!
+	metadata: NftMetadata
+	collectionAddress: String!
+	collectionName: String
+	nfts: [AchievementNft!]!
+	owners: [Owners!]!
+}
+
+type AchievementsUserProgress {
+	xp: Float!
+	level: Float!
+	levelDetails: RoadmapLevelObject
+	levelsRoadmap: [RoadmapLevelObject!]!
+}
+
+type Dao {
+	id: ID!
+	contractAddress: String
+	openseaUrl: String
+	ensDomain: String
+	isVotingEnabled: Boolean!
+	isClaimEnabled: Boolean!
+	name: String!
+	description: String!
+	slug: String!
+	avatar: String
+	cover: String
+	links: Links!
+	whitelistUrl: String
+	membersCount: Int!
+	documents: [ObjectInput!]!
+	tiersVotingWeights: [TierVotingWeightObject!]!
+	supportChatUrl: String
+	hasDemoProposals: Boolean!
+	hasShortSlugAccess: Boolean!
+	createdAt: DateTime!
+	treasuryValue: Int!
+	claimDeployDao: Boolean!
+	isInternal: Boolean!
+	winterFiatCheckoutProjectId: Int
+	achievementsRoadmapLevels: [RoadmapLevelObject!]!
+	mode: DaoMode!
+	daoMembership: [DaoMembership!]!
+	memberRoles: MemberRolesResponse!
+	posts: [Post!]!
+	collectionAddress: String
+}
+
+"""
+Dao mode
+"""
+enum DaoMode {
+	DEFAULT
+	ACHIEVEMENTS
+}
+
+type DaoMembership {
+	id: ID!
+	daoId: String!
+	userId: String!
+	role: DaoMemberRole!
+	tiers: [String!]!
+	referralMember: ReferralMember
+	createdAt: DateTime!
+	canEdit: Boolean!
+	dao: Dao!
+	user: User!
+}
+
+type Treasury {
+	dao: Dao!
+	wallets: [Wallet!]!
+	nfts(offset: Int!, isPublic: Boolean): [NftInfo!]!
+	assets: [TokenBalance!]!
+}
+
+type WalletTransactionMeta {
+	id: ID
+	hash: String!
+	ecosystem: EcosystemType!
+	chainId: ChainId!
+	description: String
+}
+
+type AllProposalsResponse {
+	items: [Proposal!]!
+	count: Int!
+}
+
+type AllDaoResponse {
+	items: [Dao!]!
+	count: Int!
+}
+
+type FeedResponse {
+	items: [Post!]!
+	count: Int!
+}
+
+type DaoMembersResponse {
+	items: [DaoMembership!]!
+	count: Int!
+}
+
+type AllUserResponse {
+	items: [User!]!
+	count: Int!
+}
+
+type WalletTransactionsResponse {
+	items: [WalletTransaction!]!
+	limit: Int!
+	offset: Int!
+}
+
+type WalletTransactionResponse {
+	tx: WalletTransaction!
+}
+
+type WalletName {
+	name: String!
+	address: String!
+}
+
+type WhitelistParticipants {
+	items: [Whitelist!]!
+	count: Int!
+}
+
+type UpdateUserEmailResponse {
+	nextAttemptToSendEmail: Float!
+}
+
+type AccessListItem {
+	address: String!
+	storageKeys: [String!]!
+}
+
+type JsonBignumber {
+	type: String!
+	hex: String!
+}
+
+type TransactionType {
+	hash: String
+	to: String
+	from: String
+	nonce: Float
+	gasLimit: JsonBignumber
+	gasPrice: JsonBignumber
+	data: String
+	value: JsonBignumber
+	chainId: Float
+	r: String
+	s: String
+	v: Float
+	type: Int
+	accessList: [AccessListItem!]
+	maxPriorityFeePerGas: JsonBignumber
+	maxFeePerGas: JsonBignumber
+}
+
+type NftTierConfig {
+	id: String!
+	tierId: String!
+	daoAddress: String!
+	collectionAddress: String!
+	isHidden: Boolean!
+	position: Float!
+}
+
+type NftAdminCollectionResponse {
+	name: String!
+	collectionAddress: String
+	symbol: String!
+	description: String!
+	externalLink: String!
+	sellerFeeBasisPoints: Float!
+	feeRecipient: String!
+	tierConfigs: [NftTierConfig!]!
+	tiers: [ExtendedNftTier!]!
+	erc721semver: String!
+}
+
+type ExtendedNftTier {
+	id: String!
+	isDeactivated: Boolean!
+	tierName: String
+	description: String
+	artworks: [NftMetadata!]!
+	artworksTotalLength: Int!
+	currency: String
+	totalPrice: TotalPrice
+	tierArtworkType: TierArtworkTypeStrings!
+	maxAmount: Float!
+	totalAmount: Float!
+	isTransferable: Boolean!
+	achievements: [MultiTypeNftAttribute!]!
+	benefits: [MultiTypeNftAttribute!]!
+	customProperties: [MultiTypeNftAttribute!]!
+	salesActivity: TierSalesActivity!
+	hasRandomShuffleMint: Boolean!
+	isRandom: Boolean!
+
+	"""
+	Date.getTime value in milliseconds
+	"""
+	transferUnlockDate: Float!
+}
+
+type TierWithPrices {
+	id: String
+	name: String!
+	price: Float
+	active: Boolean!
+	tierLimits: Float!
+}
+
+type SaleConfig {
+	prices: [TierWithPrices!]!
+	isActive: Boolean!
+	token: String!
+	treasuryWallet: String!
+	claimLimit: Float!
+	totalClaimsLimit: Float!
+	timeStart: Float!
+	timeEnd: Float!
+}
+
+type ClaimReferralNftResponse {
+	transactionInitiated: Boolean!
+	message: ReferralMessage
+}
+
+enum ReferralMessage {
+	REFERRAL_FAIL_LIMIT
+	CLAIM_NFT_FAIL_HAS_NFT
+}
+
+type AmbassadorStatusResponse {
+	message: AmbassadorStatus!
+}
+
+enum AmbassadorStatus {
+	CLAIM_AVAILABLE
+	NOT_ELIGIBLE
+	HAS_AMBASSADOR_NFT
+}
+
+type ExchangePair {
+	baseCurrencyId: Int!
+	quoteCurrencyId: Int!
+	rate: Float!
+}
+
+type NetworkEntity {
+	ecosystem: EcosystemType!
+	chainId: Int!
+	title: String!
+	rpcUrl: String!
+	blockExplorerUrl: String!
+	currencySymbol: CurrencySymbol!
+	isTestNet: Boolean!
+}
+
+"""
+Currency short title like ETH or MATIC etc.
+"""
+enum CurrencySymbol {
+	ETH
+	MATIC
+	BNB
+}
+
+type ClientFeature {
+	id: ID!
+	name: String!
+	createdAt: DateTime!
+}
+
+type ForwardRequestType {
+	name: String!
+	type: String!
+}
+
+type MetaTxTypes {
+	ForwardRequest: [ForwardRequestType!]!
+}
+
+type Domain {
+	name: String!
+	version: String!
+	chainId: Int!
+	verifyingContract: String!
+}
+
+type MetaTxMessage {
+	value: Int!
+	from: String!
+	to: String!
+	nonce: Int!
+	data: String!
+}
+
+type MetaTxParams {
+	primaryType: String!
+	types: MetaTxTypes!
+	domain: Domain!
+	message: MetaTxMessage!
+}
+
+type DaoSuggestion {
+	id: String!
+	name: String!
+	avatar: String!
+}
+
+type DaoSuggestionsBySlugResponse {
+	suggestions: [DaoSuggestion!]!
+}
+
+type EarlyAdoptersAudienceItem {
+	wallet: String!
+	name: String!
+	score: Int!
+	ethBalance: Int!
+	nftsCount: Int!
+	twitterFollowersCount: Int!
+}
+
+type EarlyAdoptersAudienceResponse {
+	items: [EarlyAdoptersAudienceItem!]!
+	total: Int!
+}
+
+input MemberRolesResponseInput {
+	SUDO: Int
+	CREATOR: Int
+	ADMIN: Int
+	MEMBER: Int
+}
+
+input AttachmentImageDataInput {
+	fileId: String!
+}
+
+input AttachmentLinkDataInput {
+	url: String!
+	title: String!
+	description: String!
+	image: String!
+}
+
+input AttachmentInput {
+	id: ID!
+	postId: String!
+	type: AttachmentType!
+	image: AttachmentImageDataInput
+	link: AttachmentLinkDataInput
+	post: PostInput!
+}
+
+input PostInput {
+	id: ID!
+	daoId: String!
+	text: String!
+	attachments: [AttachmentInput!]!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	dao: DaoInput!
+}
+
+input DocumentInput {
+	name: String!
+	url: String!
+}
+
+input TierVotingWeightInput {
+	tierId: String!
+	weight: Float = 1
+}
+
+input NewNftDataInput {
+	id: String!
+}
+
+input userNotificationInput {
+	id: ID!
+	userId: String!
+	seen: Boolean!
+	type: NotificationType!
+	newNftData: NewNftDataInput
+	createdAt: DateTime!
+	user: UserInput!
+}
+
+input OnboardingInput {
+	id: ID!
+	visitedPages: [String!]!
+}
+
+input LinksInput {
+	id: ID!
+	entityId: String!
+	site: String
+	twitter: String
+	instagram: String
+	telegram: String
+	discord: String
+	facebook: String
+}
+
+input UserInput {
+	id: ID!
+	walletAddress: String!
+	walletType: UserWalletType!
+	createdAt: DateTime!
+	ens: String
+	nonce: String!
+	displayName: String
+	slug: String
+	bio: String
+	email: String
+	emailVerified: Boolean!
+	avatar: String
+	cover: String
+	links: LinksInput!
+	hasBetaAccess: Boolean!
+	isClaimed: Boolean!
+	isSupervisor: Boolean!
+	onboarding: OnboardingInput
+	votes: [VoteInput!]!
+	hasCookieDecision: Boolean!
+	agreedWithCookie: Boolean!
+	daoMembership: [DaoMembershipInput!]!
+	notifications: [userNotificationInput!]!
+}
+
+input VoteInput {
+	id: ID!
+	power: Int!
+	proposal: ProposalInput!
+	choiceId: String!
+	user: UserInput!
+	createdAt: DateTime!
+}
+
+input ChoiceInput {
+	id: ID!
+	name: String!
+	proposal: ProposalInput!
+}
+
+input ScoreInput {
+	id: ID!
+	choiceId: String!
+	value: Int!
+	proposal: ProposalInput!
+}
+
+input ProposalInput {
+	id: ID!
+	title: String!
+	description: String!
+	createdBySuperdao: Boolean!
+	attachment: String
+	edition: Int!
+	votingType: ProposalVotingType!
+	votingPowerType: ProposalVotingPowerType!
+	createdAt: DateTime!
+	startAt: DateTime!
+	endAt: DateTime!
+	votes: [VoteInput!]!
+	choices: [ChoiceInput!]!
+	scores: [ScoreInput!]!
+	dao: DaoInput!
+}
+
+input DaoAnalyticsInput {
+	id: ID!
+	dao: DaoInput!
+	daoId: String!
+	mask: DaoMaskType!
+}
+
+input ReferralMemberInput {
+	id: ID!
+	referralLinkId: String!
+	daoMembershipId: String!
+	createdAt: DateTime!
+}
+
+input NftAttributeInput {
+	displayType: String
+	traitType: String
+	sdTrait: String
+	value: String
+}
+
+input MultiTypeNftAttributeInput {
+	displayType: String
+	traitType: String
+	sdTrait: String
+	valueString: String
+	valueNumber: Float
+}
+
+input NftMetadataInput {
+	id: String
+	image: String
+	description: String
+	animationUrl: String
+	attributes: [NftAttributeInput!]
+	imageName: String
+	animationUrlName: String
+	initialSize: Float
+	compressedSize: Float
+}
+
+input TotalPriceInput {
+	openSale: String!
+	whitelistSale: String!
+}
+
+input TierSalesActivityInput {
+	openSale: Boolean!
+	whitelistSale: Boolean!
+}
+
+input NftTierInput {
+	id: String!
+	isDeactivated: Boolean!
+	tierName: String
+	description: String
+	artworks: [NftMetadataInput!]!
+	artworksTotalLength: Int!
+	currency: String
+	totalPrice: TotalPriceInput
+	tierArtworkType: TierArtworkTypeStrings!
+	maxAmount: Float!
+	totalAmount: Float!
+	isTransferable: Boolean
+	achievements: [MultiTypeNftAttributeInput!]!
+	benefits: [MultiTypeNftAttributeInput!]!
+	customProperties: [MultiTypeNftAttributeInput!]!
+	salesActivity: TierSalesActivityInput!
+}
+
+input RoadmapbonusInput {
+	title: String!
+	description: String!
+	image: String!
+}
+
+input RoadmapLevelInput {
+	xpNeeded: Float!
+	bonuses: [RoadmapbonusInput!]!
+}
+
+input DaoInput {
+	id: ID!
+	contractAddress: String
+	openseaUrl: String
+	ensDomain: String
+	isVotingEnabled: Boolean!
+	isClaimEnabled: Boolean!
+	name: String!
+	description: String!
+	slug: String!
+	avatar: String
+	cover: String
+	links: LinksInput!
+	whitelistUrl: String
+	membersCount: Int!
+	documents: [DocumentInput!]!
+	tiersVotingWeights: [TierVotingWeightInput!]!
+	supportChatUrl: String
+	hasDemoProposals: Boolean!
+	hasShortSlugAccess: Boolean!
+	createdAt: DateTime!
+	treasuryValue: Int!
+	claimDeployDao: Boolean!
+	isInternal: Boolean!
+	winterFiatCheckoutProjectId: Int
+	achievementsRoadmapLevels: [RoadmapLevelInput!]!
+	mode: DaoMode!
+	daoMembership: [DaoMembershipInput!]!
+	memberRoles: MemberRolesResponseInput!
+	posts: [PostInput!]!
+	collectionAddress: String
+}
+
+input DaoMembershipInput {
+	id: ID!
+	daoId: String!
+	userId: String!
+	role: DaoMemberRole!
+	tiers: [String!]!
+	referralMember: ReferralMemberInput
+	createdAt: DateTime!
+	canEdit: Boolean!
+	dao: DaoInput!
+	user: UserInput!
+}
+
+input NftTierConfigInput {
+	id: String!
+	tierId: String!
+	daoAddress: String!
+	collectionAddress: String!
+	isHidden: Boolean!
+	position: Float!
+}
+
+input ExtendedNftTierInput {
+	id: String!
+	isDeactivated: Boolean!
+	tierName: String
+	description: String
+	artworks: [NftMetadataInput!]!
+	artworksTotalLength: Int!
+	currency: String
+	totalPrice: TotalPriceInput
+	tierArtworkType: TierArtworkTypeStrings!
+	maxAmount: Float!
+	totalAmount: Float!
+	isTransferable: Boolean!
+	achievements: [MultiTypeNftAttributeInput!]!
+	benefits: [MultiTypeNftAttributeInput!]!
+	customProperties: [MultiTypeNftAttributeInput!]!
+	salesActivity: TierSalesActivityInput!
+	hasRandomShuffleMint: Boolean!
+	isRandom: Boolean!
+
+	"""
+	Date.getTime value in milliseconds
+	"""
+	transferUnlockDate: Float!
+}
+
+input TierWithPricesInput {
+	id: String
+	name: String!
+	price: Float
+	active: Boolean!
+	tierLimits: Float!
+}
+
+input SaleConfigInput {
+	prices: [TierWithPricesInput!]!
+	isActive: Boolean!
+	token: String!
+	treasuryWallet: String!
+	claimLimit: Float!
+	totalClaimsLimit: Float!
+	timeStart: Float!
+	timeEnd: Float!
+}
+
+input ClientFeatureInput {
+	id: ID!
+	name: String!
+	createdAt: DateTime!
+}
+
+type Query {
+	getAchievementTier(daoAddress: String!, tier: String!): AchievementTierWithOwners!
+	getAchievementTiers(daoAddress: String!): [AchievementTierWithOwners!]!
+	getUserAchievementTiers(daoAddress: String!, owner: String!): [AchievementTierWithOwners!]!
+	getAchievementsLeaderboard(daoId: String!, search: String!): [LeaderboardMember!]!
+	getAchievementsUserProgress(daoId: String!, userId: String!): AchievementsUserProgress!
+	daoSales(daoId: String!): DaoSalesResponse!
+	daoBySlug(slug: String!): Dao
+	daoById(daoId: String!): Dao
+	daoByAddress(address: String!): Dao
+	allDaos(
+		search: String = ""
+		offset: Int = 0
+		limit: Int = 20
+		sortProperty: SortProperty = name
+		sortOrder: SortOrder = Desc
+		filterAllDaos: AllDaosFilter
+	): AllDaoResponse!
+	checkDaoSlug(slug: String!): CheckSlugResponse!
+	daoVerificationStatus(daoId: String!): Boolean!
+	canCreateMoreDao: Boolean!
+	isOpenSaleActive(daoAddress: String!): Boolean!
+	feed(daoId: String, offset: Int = 0): FeedResponse!
+	memberRoleById(daoId: ID!, memberId: ID!): DaoMemberRole!
+	currentUserMemberRole(daoId: ID!): DaoMemberRole!
+	daoMembers(
+		search: String = ""
+		offset: Int = 0
+		limit: Int = 20
+		daoId: ID!
+		roles: [DaoMemberRole!]
+	): DaoMembersResponse!
+	exportMembers(daoId: ID!): DaoMembersResponse!
+	userAsMember(daoId: String!, userId: String!): DaoMembership
+	checkCreatorExists(daoId: String!): Boolean!
+	currentUser: User!
+	userByIdOrSlug(idOrSlug: String!): User!
+	allUsers(offset: Int = 0, limit: Int = 20, search: String = ""): AllUserResponse!
+	daoParticipation(userId: String!): DaoMembersResponse!
+	hasCookieDecision: Boolean!
+	wallet(id: String!): Wallet!
+	getBalance(address: String!, chainId: Int, ecosystem: EcosystemType = EVM): [TokenBalance!]!
+	getBalanceWithCovalent(address: String!, chainId: Int, ecosystem: EcosystemType = EVM): [TokenBalance!]!
+	allWallets: [Wallet!]!
+	walletTransactions(
+		offset: Int = 0
+		limit: Int = 20
+		addresses: [String!]!
+		chainId: Int
+		ecosystem: EcosystemType = EVM
+	): WalletTransactionsResponse!
+	transaction(address: String!, chainId: Int = 137, hash: String!): WalletTransactionResponse!
+	walletsName(daoId: String!): [WalletName!]!
+	proposals(
+		search: String = ""
+		offset: Int = 0
+		limit: Int = 20
+		daoId: ID!
+		status: ProposalStatus
+	): AllProposalsResponse!
+	getProposal(proposalId: String!): Proposal
+	getChoices(proposalId: String!): [Choice!]!
+	getScores(proposalId: String!): [Score!]!
+	getVotes(proposalId: String!): [VoteModel!]!
+	treasury(daoId: String!): Treasury
+	treasuryMainWalletAddress(daoId: String!): String
+	tokensBalance(daoId: String!): [TokenBalance!]!
+	daoTransactions(
+		offset: Int = 0
+		limit: Int = 20
+		daoId: String!
+		chainId: Int
+		ecosystem: EcosystemType = EVM
+	): WalletTransactionsResponse!
+	userNfts(userId: String!): [EnrichedNft!]!
+	userNftsByDao(userId: String!, daoAddress: String!): [EnrichedNftWithCollectionAddress!]!
+	singleNft(tokenId: String!, daoAddress: String!): EnrichedNftWithCollectionAddress!
+	collection(daoAddress: String!): Collection!
+	collectionNFTs(daoAddress: String!): Collection!
+	fee: CalculatedFee!
+	collectionInfoByTier(daoAddress: String!, tier: String!): CollectionTierInfo!
+	collectionArtworks(daoAddress: String!, tier: String!): CollectionArtworks!
+	getVerifyWhitelistClaim(daoAddress: String!, tier: String!): Boolean!
+	checkNftAvailability(daoAddress: String!, tier: String!): CheckNftAvailabilityResponse!
+	getMintedNftMeta(daoAddress: String!, tier: String!): GetMintedNftResponse!
+	getDaoWhitelist(
+		search: String = ""
+		offset: Int = 0
+		limit: Int = 20
+		daoId: ID!
+		target: WhitelistTargetsEnum!
+	): WhitelistParticipants!
+	getVerify(daoAddress: String!, tier: String!): Boolean!
+	daoWhitelistSale(daoId: String!): [Whitelist!]!
+	getWhitelistRecord(id: String!): Whitelist!
+	daoAnalyticsByDaoId(daoId: String!): DaoAnalytics
+	verifyWhitelist: Boolean!
+	exchange(quoteCurrenciesIds: [Int!]!): [ExchangePair!]!
+	exchangeCurrencies(baseCurrenciesIds: [Int!]!, quoteCurrenciesIds: [Int!]!): [ExchangePair!]!
+	daoSuggestionsBySlug(input: DaoSuggestionsBySlugInput!): DaoSuggestionsBySlugResponse!
+	getBanMembersMetaTxParams(GetBanMembersMetaTxParamsInput: GetBanMembersMetaTxParamsInput!): MetaTxParams!
+	getAirdropMetaTxParams(daoAddress: String!, items: [AirdropParticipantInput!]!): MetaTxParams!
+	networks: [NetworkEntity!]!
+	nftAdminCollection(daoAddress: String!): NftAdminCollectionResponse
+	nftAdminUpdateCollectionTx(daoAddress: String!, data: NftAdminUpdateCollectionTxInput!): TransactionType!
+	nftAdminUpdateSaleTx(updateSaleData: NftAdminUpdateSaleTxInput!): TransactionType
+	clientFeatureById(id: String!): ClientFeature!
+	clientFeatures: [ClientFeature!]!
+	referralCampaignByShortId(referralCampaignShortId: String!): ReferralCampaign
+	referralLinks(referralCampaignShortId: String): [ReferralLink!]
+	ambassadorStatus(referralCampaignShortId: String, claimSecret: String): AmbassadorStatusResponse!
+	referralLinkByShortId(shortId: String!): ReferralLink
+	banMemberTx(userId: String!, daoAddress: String!, tokenIds: [String!]!): TransactionType!
+	whitelistRemoveWalletsTx(userId: String!, daoAddress: String!): TransactionType!
+	whitelistAddWalletsTx(daoAddress: String!, whitelist: [whitelistParticipantInput!]!): TransactionType!
+	airdropTx(daoAddress: String!, items: [AirdropParticipantInput!]!): TransactionType!
+	createDaoTx(
+		"""
+		Dao name
+		"""
+		name: String!
+	): TransactionType!
+	saveClaimWhitelistTx(daoAddress: String!, whitelist: [whitelistParticipantInput!]!): TransactionType!
+	buyNftOpenSaleTx(daoAddress: String!, toAddress: String!, tier: String!): TransactionType!
+	buyNftWhitelistSaleTx(daoAddress: String!, toAddress: String!, tier: String!): TransactionType!
+	deleteNftTierTx(daoAddress: String!, erc721CollectionAddress: String!, tier: String!): TransactionType!
+	grantMemberRoleTx(changeMemberRoleData: ChangeMemberRoleInput!): TransactionType!
+	revokeMemberRoleTx(changeMemberRoleData: ChangeMemberRoleInput!): TransactionType!
+	userNotifications: [UserNotification!]!
+	hasNewNotifications: Boolean!
+	getWalletNfts(walletId: String!, chainId: Int): [NftInfo!]!
+	getIsTiersTransferable(nfts: [isTierTransferableInput!]!): [NftTransferableInfo!]!
+	earlyAdoptersAudience(
+		offset: Int = 0
+		limit: Int = 20
+		daoId: String!
+		sortOrder: SortOrder = Desc
+	): EarlyAdoptersAudienceResponse!
+}
+
+enum SortProperty {
+	name
+}
+
+enum SortOrder {
+	Asc
+	Desc
+}
+
+input AllDaosFilter {
+	isVotingEnabled: Boolean
+	isClaimEnabled: Boolean
+	isInternal: Boolean
+	hasDemoProposals: Boolean
+	hasShortSlugAccess: Boolean
+	claimDeployDao: Boolean
+}
+
+"""
+Proposal status
+"""
+enum ProposalStatus {
+	active
+	pending
+	closed
+}
+
+enum WhitelistTargetsEnum {
+	sale
+	emailClaim
+}
+
+input DaoSuggestionsBySlugInput {
+	inputValue: String!
+}
+
+input GetBanMembersMetaTxParamsInput {
+	daoAddress: String!
+	tokenIds: [String!]!
+}
+
+input AirdropParticipantInput {
+	walletAddress: String!
+	tiers: [String!]!
+	email: String!
+}
+
+input NftAdminUpdateCollectionTxInput {
+	name: String!
+	symbol: String!
+	description: String!
+	externalLink: String!
+	sellerFeeBasisPoints: Float!
+	feeRecipient: String!
+	tiers: [ExtendedNftTierInput!]!
+	tierConfigs: [NftTierConfigInput!]!
+}
+
+input NftAdminUpdateSaleTxInput {
+	daoAddress: String!
+	type: SaleType!
+	options: SaleConfigInput!
+}
+
+"""
+Type of sale
+"""
+enum SaleType {
+	Public
+	Private
+}
+
+input whitelistParticipantInput {
+	walletAddress: String!
+	tiers: [String!]!
+	email: String!
+}
+
+input ChangeMemberRoleInput {
+	daoAddress: String!
+	userWalletAddress: String!
+	role: DaoMemberRole!
+}
+
+input isTierTransferableInput {
+	collectionAddress: String!
+	tierName: String!
+	id: String!
+}
+
+type Mutation {
+	updateRoadmap(updateRoadmapData: UpdateRoadmapInput!): [RoadmapLevelObject!]!
+	createDao(createDaoData: CreateDaoInput!): Dao!
+	createDefaultDao: Dao!
+	updateDaoVoting(updateVotingData: UpdateVotingInput!): Dao!
+	updateDao(updateDaoData: UpdateDaoInput!): Dao!
+	updateDaosWithShortSlugAccess: Boolean!
+	createPost(createPostData: CreatePostInput!): Post!
+	editPost(updatePostData: UpdatePostInput!): Post!
+	deletePost(deletePostData: DeletePostInput!): Boolean!
+	banMember(banMemberData: BanMemberInput!): Boolean!
+	grantMemberRole(grantMemberRoleData: ChangeMembeRoleInput!): Boolean!
+	revokeMemberRole(revokeMemberRoleData: ChangeMembeRoleInput!): Boolean!
+	updateUser(updateUserData: UpdateUserInput!): User!
+	joinBeta: User!
+	visitPage(pagePath: String!): User!
+	decideAboutCookies(decision: Boolean!): Boolean!
+	syncWallet(address: String!): Boolean!
+	createWallet(createWalletData: CreateWalletInput!): Wallet!
+	updateWallet(updateWalletData: UpdateWalletInput!): Boolean!
+	deleteWallet(deleteWalletData: DeleteWalletInput!): Boolean!
+	createProposal(proposal: ProposalSettingsDto!, createChoiceData: CreateManyChoicesDto!): Proposal!
+	editProposal(proposalId: String!, proposal: ProposalSettingsDto!, createChoiceData: CreateManyChoicesDto!): Proposal!
+	deleteProposal(proposalId: String!): Boolean!
+	vote(proposalId: String!, choiceIds: [String!]!): Boolean!
+	addDemoProposals: Boolean!
+	updateTreasuryValue: Boolean!
+	upsertTransactionMeta(data: UpsertTransactionMetaInput!): WalletTransactionMeta!
+	airdrop(airdropData: AirdropInput!): Boolean!
+	saveClaimWhitelist(whitelist: WhitelistAddWalletInput!): Boolean!
+	buyNftOpenSale(buyNftData: BuyNftOpenSaleInput!): Boolean!
+	buyNftWhitelistSale(buyNftData: BuyNftWhitelistSaleInput!): Boolean!
+	claimNft(tier: String!, daoAddress: String!): Boolean!
+	claimNftByEmail(uid: String!): Boolean!
+	sendEmailVerificationMessage: UpdateUserEmailResponse!
+	updateUserEmail(updateUserEmailInput: UpdateUserEmailInput!): UpdateUserEmailResponse!
+	removeUserEmail: Boolean!
+	whitelistRemoveWallet(whitelistRemoveWalletData: WhitelistRemoveWalletInput!): Boolean!
+	whitelistAddWallet(whitelistAddWalletData: WhitelistAddWalletInput!): Boolean!
+	whitelistAddEmail(whitelistAddEmailData: WhitelistData!): Boolean!
+	updateWhitelistStatus(updateWhitelistStatusData: UpdateWhitelistStatusInput!): Boolean!
+	authNonce(nonceData: NonceDto!): String!
+	authSignature(signatureData: SignatureDto!): User!
+	authSmartWallet(smartWalletSignatureData: SmartWalletSignatureDto!): User!
+	validateMagicLinkToken(didToken: String!): Boolean!
+	validateMagicEmail(email: String!): Boolean!
+	validateMagicEmailAndAddress(email: String!, walletAddress: String!): Boolean!
+	authMagicLinkNonce(magicLinkNonceData: MagicLinkNonceDto!): String!
+	logout: Boolean!
+	createDaoAnalytics(daoId: String!, mask: DaoMaskType!): DaoAnalytics!
+	updateDaoAnalytics(id: String!, mask: DaoMaskType!): DaoAnalytics!
+	sendMetaTransaction(SendMetaTxParamsInput: SendMetaTxParamsInput!): TransactionType!
+	nftAdminUpdateCollection(data: NftAdminUpdateCollectionInput!): Boolean!
+	nftAdminUpdateSale(data: NftAdminUpdateSaleInput!): Boolean!
+	createClientFeature(clientFeature: CreateFeatureDto!): ClientFeature!
+	updateClientFeature(clientFeature: UpdateFeatureDto!): Boolean!
+	deleteClientFeature(id: String!): Boolean!
+	claimReferralNft(referralLinkShortId: String!): ClaimReferralNftResponse!
+	claimAmbassadorNft(referralCampaignId: String!, claimSecret: String): ClaimReferralNftResponse!
+	buyNftMulticurrencyOpenSaleTx(daoAddress: String!, tier: String!, tokenAddress: String!): TransactionType!
+	processAllowanceTransaction(
+		daoAddress: String!
+		tokenAddress: String!
+		tier: String!
+		transactionHash: String!
+	): Boolean!
+	buyNftAllowanceTx(daoAddress: String!, tier: String!, tokenAddress: String!): TransactionType!
+	toggleNotification(notificationId: ID!): Boolean!
+	changeNftsVisibility(nftsIds: [String!]!, isPublic: Boolean!, daoId: String!): Boolean!
+}
+
+input UpdateRoadmapInput {
+	daoId: ID!
+	levels: [RoadmapLevelInput!]!
+}
+
+input CreateDaoInput {
+	name: String!
+	description: String!
+	slug: String!
+	avatar: String
+	cover: String
+	site: String = ""
+	contractAddress: String
+	ensDomain: String = ""
+	twitter: String = ""
+	instagram: String = ""
+	telegram: String = ""
+	discord: String = ""
+	whitelistUrl: String = ""
+	documents: [DocumentInput!]!
+	supportChatUrl: String = ""
+}
+
+input UpdateVotingInput {
+	id: ID!
+	tiersVotingWeights: [TierVotingWeightInput!]
+}
+
+input UpdateDaoInput {
+	name: String
+	description: String
+	slug: String
+	avatar: String
+	cover: String
+	site: String = ""
+	contractAddress: String
+	ensDomain: String = ""
+	twitter: String = ""
+	instagram: String = ""
+	telegram: String = ""
+	discord: String = ""
+	whitelistUrl: String = ""
+	documents: [DocumentInput!]
+	supportChatUrl: String = ""
+	id: ID!
+	openseaUrl: String
+	tiersVotingWeights: [TierVotingWeightInput!]
+	isVotingEnabled: Boolean
+	isClaimEnabled: Boolean
+	claimDeployDao: Boolean = false
+	isInternal: Boolean = false
+}
+
+input CreatePostInput {
+	daoId: ID!
+	text: String!
+	attachments: [String!]!
+}
+
+input UpdatePostInput {
+	postId: ID!
+	text: String!
+	attachments: [String!]!
+}
+
+input DeletePostInput {
+	postId: ID!
+}
+
+input BanMemberInput {
+	userId: String!
+	transactionHash: String!
+	daoAddress: String!
+	shouldBurn: Boolean!
+	isGasless: Boolean!
+}
+
+input ChangeMembeRoleInput {
+	daoAddress: String!
+	userWalletAddress: String!
+	transactionHash: String!
+	role: DaoMemberRole!
+}
+
+input UpdateUserInput {
+	id: String!
+	hasBetaAccess: Boolean
+	displayName: String
+	slug: String
+	bio: String
+	avatar: String
+	cover: String
+	twitter: String
+	site: String
+	instagram: String
+	telegram: String
+	discord: String
+}
+
+input CreateWalletInput {
+	daoId: ID!
+	name: String!
+	description: String!
+	address: String!
+	type: TreasuryWalletType!
+}
+
+input UpdateWalletInput {
+	id: String!
+	name: String!
+	description: String
+}
+
+input DeleteWalletInput {
+	id: String!
+}
+
+input ProposalSettingsDto {
+	title: String!
+	description: String!
+	attachment: String
+	daoId: String!
+	votingType: ProposalVotingType!
+	votingPowerType: ProposalVotingPowerType!
+	startAt: DateTime
+	endAt: DateTime!
+}
+
+input CreateManyChoicesDto {
+	choices: [CreateChoiceDto!]!
+}
+
+input CreateChoiceDto {
+	name: String!
+}
+
+input UpsertTransactionMetaInput {
+	hash: String!
+	walletId: String!
+	ecosystem: EcosystemType!
+	chainId: Int
+	description: String!
+}
+
+input AirdropInput {
+	transactionHash: String!
+	daoAddress: String!
+	items: [AirdropParticipantInput!]!
+	isGasless: Boolean!
+}
+
+input WhitelistAddWalletInput {
+	transactionHash: String!
+	daoAddress: String!
+	items: [whitelistParticipantInput!]!
+}
+
+input BuyNftOpenSaleInput {
+	transactionHash: String!
+	email: String
+	daoAddress: String!
+	tier: String!
+}
+
+input BuyNftWhitelistSaleInput {
+	transactionHash: String!
+	email: String!
+	daoAddress: String!
+	tier: String!
+}
+
+input UpdateUserEmailInput {
+	email: String!
+}
+
+input WhitelistRemoveWalletInput {
+	userId: String!
+	transactionHash: String!
+	daoAddress: String!
+}
+
+input WhitelistData {
+	daoId: String!
+	items: [whitelistParticipantInput!]!
+}
+
+input UpdateWhitelistStatusInput {
+	id: String!
+	status: WhitelistStatusEnum!
+}
+
+input NonceDto {
+	walletAddress: String!
+}
+
+input SignatureDto {
+	walletAddress: String!
+	nonce: String!
+	signature: String!
+	walletType: UserWalletType!
+}
+
+input SmartWalletSignatureDto {
+	walletAddress: String!
+	nonce: String!
+	signature: String!
+}
+
+input MagicLinkNonceDto {
+	walletAddress: String!
+	email: String!
+	discord: String = ""
+	twitter: String = ""
+	facebook: String = ""
+}
+
+input SendMetaTxParamsInput {
+	signature: String!
+	message: MetaTxMessageInput!
+}
+
+input MetaTxMessageInput {
+	value: Int!
+	from: String!
+	to: String!
+	nonce: Int!
+	data: String!
+}
+
+input NftAdminUpdateCollectionInput {
+	transactionHash: String!
+	daoAddress: String!
+}
+
+input NftAdminUpdateSaleInput {
+	transactionHash: String!
+	daoAddress: String!
+	type: SaleType!
+}
+
+input CreateFeatureDto {
+	name: String!
+}
+
+input UpdateFeatureDto {
+	id: ID!
+	name: String!
+}

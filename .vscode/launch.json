@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to dev:server",
+            "type": "node",
+            "request": "attach",
+            "protocol": "inspector",
+            "port": 4321,
+            "restart": true,
+            "cwd": "${workspaceRoot}"
+        }
+    ]
+}

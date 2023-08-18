@@ -1,0 +1,177 @@
+fragment Wallet on Wallet {
+	id
+}
+
+fragment WalletAddress on Wallet {
+	address
+}
+
+fragment WalletTransaction on WalletTransaction {
+	ecosystem
+	chainId
+	description
+	hash
+	type
+	status
+	executed
+	gasFee
+	direction
+	parts {
+		token {
+			type
+			name
+			address
+			symbol
+			ecosystem
+			chainId
+			decimals
+			iconUrl
+			... on ERC721Token {
+				tokenId
+			}
+		}
+		value
+		from {
+			type
+			address
+		}
+		to {
+			type
+			address
+		}
+		direction
+	}
+	fromAddress
+	toAddress
+	value
+	walletAddress
+	walletName
+	walletId
+}
+
+mutation createWallet($createWalletData: CreateWalletInput!) {
+	createWallet(createWalletData: $createWalletData) {
+		...Wallet
+	}
+}
+
+query getBalance($address: String!, $chainId: Int, $ecosystem: EcosystemType = EVM) {
+	getBalance(address: $address, chainId: $chainId, ecosystem: $ecosystem) {
+		tokenAddress
+		symbol
+		name
+		decimals
+		logo
+		balance
+		valueUsd
+		priceUsd
+		amount
+		value
+		token {
+			type
+			name
+			address
+			symbol
+			ecosystem
+			chainId
+			decimals
+			iconUrl
+			... on ERC721Token {
+				tokenId
+			}
+		}
+		quote {
+			currency
+			rate
+		}
+	}
+}
+
+query getBalanceWithCovalent($address: String!, $chainId: Int, $ecosystem: EcosystemType = EVM) {
+	getBalanceWithCovalent(address: $address, chainId: $chainId, ecosystem: $ecosystem) {
+		tokenAddress
+		symbol
+		name
+		decimals
+		logo
+		balance
+		valueUsd
+		priceUsd
+		amount
+		value
+		token {
+			type
+			name
+			address
+			symbol
+			ecosystem
+			chainId
+			decimals
+			iconUrl
+			... on ERC721Token {
+				tokenId
+			}
+		}
+		quote {
+			currency
+			rate
+		}
+	}
+}
+
+query allWallets {
+	allWallets {
+		...WalletAddress
+	}
+}
+
+query walletTransactions($addresses: [String!]!, $chainId: Int, $ecosystem: EcosystemType = EVM) {
+	walletTransactions(addresses: $addresses, chainId: $chainId, ecosystem: $ecosystem) {
+		items {
+			...WalletTransaction
+		}
+		limit
+		offset
+	}
+}
+
+query transaction($address: String!, $chainId: Int, $hash: String!) {
+	transaction(address: $address, chainId: $chainId, hash: $hash) {
+		tx {
+			...WalletTransaction
+		}
+	}
+}
+
+query wallet($id: String!) {
+	wallet(id: $id) {
+		...CommonWallet,
+		owners {
+			id
+			walletAddress
+			avatar
+			displayName
+			isDaoMember
+			role
+		}
+	}
+}
+
+query walletsName($daoId: String!) {
+    walletsName(daoId: $daoId) {
+        name
+		address
+    }
+}
+
+mutation syncWallet($address: String!) {
+	syncWallet(address: $address)
+}
+
+mutation deleteWallet($deleteWalletData: DeleteWalletInput!) {
+	deleteWallet(deleteWalletData: $deleteWalletData)
+}
+
+mutation updateWallet($updateWalletData: UpdateWalletInput!) {
+	updateWallet(updateWalletData: $updateWalletData)
+}

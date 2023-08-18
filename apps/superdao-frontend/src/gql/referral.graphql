@@ -1,0 +1,50 @@
+query ReferralCampaignByShortId($referralCampaignShortId: String!) {
+	referralCampaignByShortId(referralCampaignShortId: $referralCampaignShortId) {
+		id
+		shortId
+		daoId
+		tier
+		createdAt
+	}
+}
+
+query ReferralLinks($referralCampaignShortId: String) {
+	referralLinks(referralCampaignShortId: $referralCampaignShortId) {
+		id
+		shortId
+		limitLeft
+	}
+}
+
+query SingleReferralLink($shortId: String!) {
+	referralLinkByShortId(shortId: $shortId) {
+		status
+		limitLeft
+		referralCampaign {
+			shortId
+			daoId
+			tier
+			isRecursive
+		}
+	}
+}
+
+mutation ClaimReferralNft($referralLinkShortId: String!) {
+	claimReferralNft(referralLinkShortId: $referralLinkShortId) {
+		transactionInitiated
+		message
+	}
+}
+
+mutation ClaimAmbassadorNft($referralCampaignId: String!, $claimSecret: String) {
+	claimAmbassadorNft(referralCampaignId: $referralCampaignId, claimSecret: $claimSecret) {
+		transactionInitiated
+		message
+	}
+}
+
+query AmbassadorStatus($referralCampaignShortId: String!, $claimSecret: String) {
+	ambassadorStatus(referralCampaignShortId: $referralCampaignShortId, claimSecret: $claimSecret) {
+		message
+	}
+}

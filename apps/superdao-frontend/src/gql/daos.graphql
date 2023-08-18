@@ -1,0 +1,165 @@
+fragment PublicDao on Dao {
+	id
+	slug
+	name
+	description
+	documents {
+		name
+		url
+	}
+	tiersVotingWeights {
+		tierId
+		weight
+	}
+	links {
+		site
+		discord
+		twitter
+		telegram
+		instagram
+	}
+	avatar
+	cover
+	membersCount
+	whitelistUrl
+	contractAddress
+	collectionAddress
+	openseaUrl
+	supportChatUrl
+	ensDomain
+	isVotingEnabled
+	isClaimEnabled
+	hasShortSlugAccess
+	createdAt
+	claimDeployDao
+	isInternal
+	mode
+	achievementsRoadmapLevels {
+		xpNeeded
+		bonuses {
+			description
+			image
+			title
+		}
+	}
+}
+
+query daoSales($daoId: String!) {
+	daoSales(daoId: $daoId) {
+		sales {
+			ERC721_WHITELIST_SALE
+			ERC721_OPEN_SALE
+		}
+	}
+}
+
+query daoBySlug($slug: String!) {
+	daoBySlug(slug: $slug) {
+		...PublicDao
+	}
+}
+
+query daoByAddress($address: String!) {
+	daoByAddress(address: $address) {
+		...PublicDao
+	}
+}
+
+query canCreateMoreDao {
+	canCreateMoreDao
+}
+
+query daoBySlugWithRoles($slug: String!) {
+	daoBySlug(slug: $slug) {
+		...PublicDao
+		memberRoles {
+			CREATOR
+			MEMBER
+			ADMIN
+		}
+	}
+}
+
+query daoVerificationStatus($daoId: String!) {
+	daoVerificationStatus(daoId: $daoId)
+}
+
+query daoById($id: String!) {
+	daoById(daoId: $id) {
+		...PublicDao
+	}
+}
+
+query daoPreviewById($id: String!) {
+	daoById(daoId: $id) {
+		id
+		slug
+		name
+		description
+		membersCount
+		avatar
+		contractAddress
+	}
+}
+
+query checkDaoSlug($slug: String!) {
+	checkDaoSlug(slug: $slug) {
+		isAvailable
+		nextAvailable
+	}
+}
+
+query allDaos(
+	$limit: Int = 20
+	$offset: Int = 0
+	$search: String = ""
+	$sortOrder: SortOrder
+	$sortProperty: SortProperty
+	$filter: AllDaosFilter
+) {
+	allDaos(
+		limit: $limit
+		offset: $offset
+		search: $search
+		sortOrder: $sortOrder
+		sortProperty: $sortProperty
+		filterAllDaos: $filter
+	) {
+		count
+		items {
+			...PublicDao
+		}
+	}
+}
+
+mutation createDao($createDaoData: CreateDaoInput!) {
+	createDao(createDaoData: $createDaoData) {
+		...PublicDao
+	}
+}
+
+mutation createDefaultDao {
+	createDefaultDao {
+		...PublicDao
+	}
+}
+
+mutation updateDao($updateDaoData: UpdateDaoInput!) {
+	updateDao(updateDaoData: $updateDaoData) {
+		...PublicDao
+	}
+}
+
+mutation updateDaoVoting($updateVotingData: UpdateVotingInput!) {
+	updateDaoVoting(updateVotingData: $updateVotingData) {
+		...PublicDao
+	}
+}
+
+query isOpenSaleActive($daoAddress: String!) {
+	isOpenSaleActive(daoAddress: $daoAddress)
+}
+
+mutation updateDaosWithShortSlugAccess {
+	updateDaosWithShortSlugAccess
+}

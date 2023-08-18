@@ -1,0 +1,65 @@
+query snapshotSpace($id: String) {
+	space(id: $id) {
+		id
+		name
+		about
+		network
+		symbol
+		members
+		avatar
+	}
+}
+
+query snapshotProposal($id: String) {
+	proposal(id: $id) {
+		id
+    title
+    body
+    choices
+    start
+    end
+    snapshot
+    state
+    author
+    space {
+      id
+      name
+    }
+    votes
+    scores
+	}
+}
+
+query snapshotProposals($first: Int = 20, $skip: Int = 0, $where: ProposalWhere, $orderBy: String = "created") {
+	proposals(first: $first, skip: $skip, where: $where, orderBy: $orderBy) {
+		id
+    title
+    body
+    choices
+    start
+    end
+    snapshot
+    state
+    author
+    space {
+      id
+      name
+    }
+    scores
+	}
+}
+
+query snapshotProposalVotes($first: Int = 1, $skip: Int = 0, $where: VoteWhere, $orderBy: String  = "created") {
+	votes(first: $first, skip: $skip, where: $where, orderBy: $orderBy) {
+		id
+    voter
+    created
+    proposal {
+      id
+    }
+    choice
+    space {
+      id
+    }
+	}
+}

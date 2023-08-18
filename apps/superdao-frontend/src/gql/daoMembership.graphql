@@ -1,0 +1,78 @@
+query MemberRoleByUserId($daoId: ID!, $memberId: ID!) {
+	memberRoleById(daoId: $daoId, memberId: $memberId)
+}
+
+query CurrentUserMemberRole($daoId: ID!) {
+	currentUserMemberRole(daoId: $daoId)
+}
+
+fragment PublicDaoMembership on DaoMembership {
+	createdAt
+	dao {
+		id
+	}
+	daoId
+	id
+	role
+	tiers
+	user {
+		id
+		slug
+		displayName
+		avatar
+		walletAddress
+		ens
+		isClaimed
+	}
+	userId
+}
+
+query DaoMembers($daoId: ID!, $limit: Int = 20, $offset: Int = 0, $roles: [DaoMemberRole!], $search: String = "") {
+	daoMembers(daoId: $daoId, limit: $limit, offset: $offset, roles: $roles, search: $search) {
+		count
+		items {
+			...PublicDaoMembership
+		}
+	}
+}
+
+query DaoMembersToExport($daoId: ID!) {
+	exportMembers(daoId: $daoId) {
+		count
+		items {
+			tiers
+			user {
+				walletAddress
+				email
+			}
+		}
+	}
+}
+
+query UserAsMember($daoId: String!, $userId: String!) {
+	userAsMember(daoId: $daoId, userId: $userId) {
+		canEdit
+		createdAt
+		daoId
+		id
+		role
+		tiers
+		userId
+	}
+}
+
+mutation BanMember($banMemberData: BanMemberInput!) {
+	banMember(banMemberData: $banMemberData)
+}
+
+mutation GrantMemberRole($grantMemberRoleData: ChangeMembeRoleInput!) {
+	grantMemberRole(grantMemberRoleData: $grantMemberRoleData)
+}
+
+mutation RevokeMemberRole($revokeMemberRoleData: ChangeMembeRoleInput!) {
+	revokeMemberRole(revokeMemberRoleData: $revokeMemberRoleData)
+}
+
+query checkCreatorExists($daoId: String!) {
+	checkCreatorExists(daoId: $daoId)
+}

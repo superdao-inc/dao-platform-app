@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Loos Wide';
+    src: url('/assets/fonts/Loos Latin, Cyrillic Wide-Bold-Web.eot');
+    src: url('/assets/fonts/Loos Latin, Cyrillic Wide-Bold-Web.eot#iefix') format('embedded-opentype'),
+        url('/assets/fonts/Loos Latin, Cyrillic Wide-Bold-Web.woff2') format('woff2'),
+        url('/assets/fonts/Loos Latin, Cyrillic Wide-Bold-Web.woff') format('woff'),
+        url('/assets/fonts/Loos Latin, Cyrillic Wide-Bold-Web.ttf') format('truetype');
+
+    font-weight: 700;
+    font-style: normal;
+}

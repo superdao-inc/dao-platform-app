@@ -1,0 +1,23 @@
+fragment EarlyAdoptersItem on EarlyAdoptersAudienceItem {
+	wallet
+	name
+	score
+	ethBalance
+	nftsCount
+	twitterFollowersCount
+}
+
+query EarlyAdoptersAudience($daoId: String!, $sortOrder: SortOrder, $limit: Int = 20, $offset: Int = 0) {
+	earlyAdoptersAudience(daoId: $daoId, sortOrder: $sortOrder, limit: $limit, offset: $offset) {
+		total
+		items {
+			...EarlyAdoptersItem
+		}
+	}
+}
+
+query EarlyAdoptersAudienceCounter($daoId: String!) {
+	earlyAdoptersAudience(daoId: $daoId) {
+		total
+	}
+}

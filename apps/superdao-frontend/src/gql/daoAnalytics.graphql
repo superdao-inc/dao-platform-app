@@ -1,0 +1,20 @@
+query DaoAnalyticsByDaoId($daoId: String!) {
+	daoAnalyticsByDaoId(daoId: $daoId) {
+		id
+		mask
+	}
+}
+
+mutation CreateDaoAnalytics($daoId: String!, $mask: DaoMaskType!) {
+	createDaoAnalytics(daoId: $daoId, mask: $mask) {
+		id
+		mask
+	}
+}
+
+mutation UpdateDaoAnalytics($id: String!, $mask: DaoMaskType!) {
+	updateDaoAnalytics(id: $id, mask: $mask) {
+		id
+		mask
+	}
+}

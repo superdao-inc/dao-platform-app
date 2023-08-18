@@ -1,0 +1,64 @@
+fragment CommonPostAttachment on Attachment {
+	id
+	image {
+		fileId
+	}
+	link {
+		description
+		image
+		title
+		url
+	}
+	postId
+	type
+}
+
+fragment CommonPostDao on Dao {
+	id
+	slug
+	name
+	avatar
+}
+
+fragment CommonPost on Post {
+	attachments {
+		...CommonPostAttachment
+	}
+	dao {
+		...CommonPostDao
+	}
+	createdAt
+	daoId
+	id
+	text
+	updatedAt
+}
+
+fragment CommonFeed on FeedResponse {
+	count
+	items {
+		...CommonPost
+	}
+}
+
+query feed($offset: Int = 0, $daoId: String) {
+	feed(offset: $offset, daoId: $daoId) {
+		...CommonFeed
+	}
+}
+
+mutation CreatePost($createPostData: CreatePostInput!) {
+	createPost(createPostData: $createPostData) {
+		...CommonPost
+	}
+}
+
+mutation EditPost($updatePostData: UpdatePostInput!) {
+	editPost(updatePostData: $updatePostData) {
+		...CommonPost
+	}
+}
+
+mutation DeletePost($deletePostData: DeletePostInput!) {
+	deletePost(deletePostData: $deletePostData)
+}

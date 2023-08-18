@@ -1,0 +1,44 @@
+#import "./defaultTxFragment.graphql"
+
+fragment ForwardRequestType on ForwardRequestType {
+	name,
+	type
+}
+
+fragment MetaTxParams on MetaTxParams {
+	primaryType,
+	types {
+		ForwardRequest {
+			...ForwardRequestType
+		}
+	},
+	domain {
+		name,
+		version, chainId, verifyingContract
+	},
+	message {
+		from,
+		to,
+		nonce,
+		value,
+		data
+	}
+}
+
+query GetBanMembersMetaTxParams($GetBanMembersMetaTxParamsInput: GetBanMembersMetaTxParamsInput!) {
+	getBanMembersMetaTxParams(GetBanMembersMetaTxParamsInput: $GetBanMembersMetaTxParamsInput) {
+		...MetaTxParams
+	}
+}
+
+query GetAirdropMetaTxParams($daoAddress: String!, $items: [AirdropParticipantInput!]!) {
+	getAirdropMetaTxParams(daoAddress: $daoAddress, items: $items) {
+		...MetaTxParams
+	}
+}
+
+mutation SendMetaTransaction($SendMetaTxParamsInput: SendMetaTxParamsInput!) {
+	sendMetaTransaction(SendMetaTxParamsInput: $SendMetaTxParamsInput) {
+		...DefaultTxWithHash
+	}
+}

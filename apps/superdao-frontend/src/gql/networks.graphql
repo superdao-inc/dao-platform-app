@@ -1,0 +1,11 @@
+query Networks {
+	networks {
+		ecosystem
+		chainId
+		title
+		rpcUrl
+		blockExplorerUrl
+		currencySymbol
+		isTestNet
+	}
+}

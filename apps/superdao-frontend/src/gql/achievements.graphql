@@ -1,0 +1,170 @@
+fragment AchievementUser on User {
+	id
+	slug
+	displayName
+	avatar
+	walletAddress
+	ens
+	isClaimed
+}
+
+fragment AchievementNftMetadata on NftMetadata {
+	id
+	image
+	description
+	animationUrl
+	attributes {
+		displayType
+		traitType
+		sdTrait
+		value
+	}
+	imageName
+	animationUrlName
+}
+
+fragment AchievementTierMetadata on NftMetadata {
+	id
+	image
+	description
+	animationUrl
+	attributes {
+		displayType
+		traitType
+		sdTrait
+		value
+	}
+	imageName
+	animationUrlName
+}
+
+fragment AchievementNft on AchievementNft {
+	tokenAddress
+	tokenId
+	contractType
+	tokenUri
+	syncedAt
+	amount
+	name
+	symbol
+	tierId
+	tierName
+	ownerOf
+	metadata {
+		...AchievementNftMetadata
+	}
+}
+
+fragment AchievementsUserProgress on AchievementsUserProgress {
+	xp
+	level
+	levelDetails {
+		xpNeeded
+		bonuses {
+			title
+			description
+			image
+		}
+	}
+	levelsRoadmap {
+		xpNeeded
+		bonuses {
+			title
+			description
+			image
+		}
+	}
+}
+
+fragment AchievementTierAttribute on MultiTypeNftAttribute {
+	displayType
+	traitType
+	sdTrait
+	valueString
+	valueNumber
+}
+
+fragment AchievementTier on AchievementTierWithOwners {
+	id
+	isDeactivated
+	tierName
+	description
+	collectionAddress
+	collectionName
+	artworks {
+		...AchievementTierMetadata
+	}
+	artworksTotalLength
+	currency
+	# totalPrice
+	tierArtworkType
+	maxAmount
+	totalAmount
+	isTransferable
+	achievements {
+		...AchievementTierAttribute
+	}
+	benefits {
+		...AchievementTierAttribute
+	}
+	customProperties {
+		...AchievementTierAttribute
+	}
+	metadata {
+		...AchievementTierMetadata
+	}
+	nfts {
+		...AchievementNft
+	}
+	owners {
+		id
+		displayName
+		email
+		avatar
+		walletAddress
+		ens
+		tokenId
+		name
+	}
+}
+
+query getAchievementsLeaderboard($daoId: String!, $search: String = "") {
+	getAchievementsLeaderboard(daoId: $daoId, search: $search) {
+		user {
+			...AchievementUser
+		}
+		level
+		xp
+		achievementNFTs {
+			...AchievementNft
+		}
+		achievementNFTsCount
+		role
+		roadmapLevelsCount
+		level
+	}
+}
+
+query getAchievementsUserProgress($daoId: String!, $userId: String!) {
+	getAchievementsUserProgress(daoId: $daoId, userId: $userId) {
+		...AchievementsUserProgress
+	}
+}
+
+query getAchievementTiers($daoAddress: String!) {
+	getAchievementTiers(daoAddress: $daoAddress) {
+		...AchievementTier
+	}
+}
+
+query getUserAchievementTiers($daoAddress: String!, $owner: String!) {
+	getUserAchievementTiers(daoAddress: $daoAddress, owner: $owner) {
+		...AchievementTier
+	}
+}
+
+query getAchievementTier($daoAddress: String!, $tier: String!) {
+	getAchievementTier(daoAddress: $daoAddress, tier: $tier) {
+		...AchievementTier
+	}
+}

@@ -1,0 +1,50 @@
+fragment CommonNftInfo on NftInfo {
+	id
+	amount
+	blockNumber
+	blockNumberMinted
+	contractType
+	isPublic
+	metadata {
+		animationUrl
+		attributes {
+			displayType
+			traitType
+			value
+		}
+		backgroundColor
+		description
+		externalUrl
+		image
+		name
+		youtubeUrl
+	}
+	name
+	ownerOf
+	symbol
+	syncedAt
+	tokenAddress
+	tokenId
+	tokenUri
+}
+
+fragment NftTransferable on NftTransferableInfo {
+	id
+	isTransferable
+}
+
+query getWalletNfts($walletId: String!, $chainId: Int) {
+	getWalletNfts(walletId: $walletId, chainId: $chainId) {
+		...CommonNftInfo
+	}
+}
+
+query getIsTiersTransferable($nfts: [isTierTransferableInput!]!) {
+	getIsTiersTransferable(nfts: $nfts) {
+		...NftTransferable
+	}
+}
+
+mutation changeNftsVisibility($nftsIds: [String!]!, $isPublic: Boolean!, $daoId: String!) {
+	changeNftsVisibility(nftsIds: $nftsIds, isPublic: $isPublic, daoId: $daoId)
+}

@@ -1,0 +1,89 @@
+query NftAdminCollection($daoAddress: String!) {
+	nftAdminCollection(daoAddress: $daoAddress) {
+		name
+		collectionAddress
+		symbol
+		description
+		externalLink
+		sellerFeeBasisPoints
+		feeRecipient
+		erc721semver
+		tierConfigs {
+			id
+			tierId
+			daoAddress
+			collectionAddress
+			isHidden
+			position
+		}
+		tiers {
+			id
+			tierName
+			description
+			isRandom
+			hasRandomShuffleMint
+			isTransferable
+			transferUnlockDate
+			isDeactivated
+			tierArtworkType
+			maxAmount
+			totalAmount
+			currency
+			artworksTotalLength
+			totalPrice {
+				openSale
+				whitelistSale
+			}
+			artworks {
+				id
+				image
+				animationUrl
+			}
+			achievements {
+				displayType
+				sdTrait
+				traitType
+				valueString
+				valueNumber
+			}
+			benefits {
+				displayType
+				sdTrait
+				traitType
+				valueString
+				valueNumber
+			}
+			customProperties {
+				displayType
+				sdTrait
+				traitType
+				valueString
+				valueNumber
+			}
+			salesActivity {
+				openSale
+				whitelistSale
+			}
+		}
+	}
+}
+
+query NftAdminUpdateCollectionTx($daoAddress: String!, $data: NftAdminUpdateCollectionTxInput!) {
+	nftAdminUpdateCollectionTx(daoAddress: $daoAddress, data: $data) {
+		...DefaultTx
+	}
+}
+
+mutation NftAdminUpdateCollection($data: NftAdminUpdateCollectionInput!) {
+	nftAdminUpdateCollection(data: $data)
+}
+
+query NftAdminUpdateSaleTx($updateSaleData: NftAdminUpdateSaleTxInput!) {
+	nftAdminUpdateSaleTx(updateSaleData: $updateSaleData) {
+		...DefaultTx
+	}
+}
+
+mutation NftAdminUpdateSale($data: NftAdminUpdateSaleInput!) {
+	nftAdminUpdateSale(data: $data)
+}
